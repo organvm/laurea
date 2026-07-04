@@ -27,7 +27,9 @@ jobs:
           # the default token still measures the full public estate.
           LAUREA_TOKEN: ${{ secrets.LAUREA_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: laurea run --login 4444J99
+        # repository_owner, not a hardcoded login — fork/template adopters get
+        # their own laurels with zero edits.
+        run: laurea run --login "${{ github.repository_owner }}"
       - name: Commit refreshed assets
         run: |
           git config user.name "laurea[bot]"

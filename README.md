@@ -24,6 +24,28 @@ recompute themselves daily.
 The full generated report: **[SUPERLATIVES.md](assets/SUPERLATIVES.md)** ·
 The honesty contract: **[METHODOLOGY.md](METHODOLOGY.md)**
 
+## The verdict meter
+
+Output is what you ship; the verdict is what the world does about it.
+LAVREA also records the *reception* signals (stars, followers, traffic)
+as a daily time series and renders them with deltas — so the verdict is
+a chart, not a feeling:
+
+<p align="center">
+  <img src="assets/cards/verdict.svg" alt="verdict meter" width="420"/>
+</p>
+
+## Run it on yourself in 60 seconds
+
+1. **[Use this template](../../generate)** (or fork).
+2. Enable Actions on your copy. That's it — the workflow detects the
+   repo owner and computes *your* laurels daily; only the claims *your*
+   data supports will render.
+3. Optional: add a `LAUREA_TOKEN` repo secret (a classic PAT) so private
+   org membership and restricted contributions count too.
+4. Embed the cards anywhere:
+   `https://raw.githubusercontent.com/YOU/laurea/main/assets/cards/hero.svg`
+
 ## How the top-1% claim actually works
 
 Anyone can put "top 1%" in a bio. LAVREA makes it a **theorem with

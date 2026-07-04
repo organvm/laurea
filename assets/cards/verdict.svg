@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="230" viewBox="0 0 420 230" role="img" aria-label="Verdict meter — reception signals">
+  
+  <style>
+    .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
+    .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
+    .tier { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    .ev { font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
+    .fade { opacity: 0; animation: fadein 0.9s ease-out forwards; }
+    .d1 { animation-delay: 0.15s; } .d2 { animation-delay: 0.3s; }
+    .d3 { animation-delay: 0.45s; } .d4 { animation-delay: 0.6s; }
+    @keyframes fadein { to { opacity: 1; } }
+  </style>
+
+  <defs>
+  <linearGradient id="shV" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#9e7b2a"/>
+    <stop offset="50%" stop-color="#e3b341">
+      <animate attributeName="offset" values="0.2;0.8;0.2" dur="6s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="100%" stop-color="#9e7b2a"/>
+  </linearGradient>
+</defs>
+  <rect width="419" height="229" x="0.5" y="0.5" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text class="tier fade" fill="url(#shV)" x="32" y="38" style="font-size:15px">THE VERDICT METER</text>
+  <text class="ev fade d1" x="32" y="58">reception, measured daily — output is claimed above; this is what the world did</text>
+  <g class="fade d1" transform="translate(0,96)"><text class="t" x="32" y="0">stars across the estate</text><text class="big" x="300" y="2" style="font-size:20px" text-anchor="end">62</text><text class="tier" x="388" y="2" text-anchor="end" fill="#8b949e">baseline</text></g><g class="fade d2" transform="translate(0,126)"><text class="t" x="32" y="0">followers</text><text class="big" x="300" y="2" style="font-size:20px" text-anchor="end">38</text><text class="tier" x="388" y="2" text-anchor="end" fill="#8b949e">baseline</text></g><g class="fade d3" transform="translate(0,156)"><text class="t" x="32" y="0">showcase repo stars</text><text class="big" x="300" y="2" style="font-size:20px" text-anchor="end">0</text><text class="tier" x="388" y="2" text-anchor="end" fill="#8b949e">baseline</text></g><g class="fade d4" transform="translate(0,186)"><text class="t" x="32" y="0">unique visitors (14d)</text><text class="big" x="300" y="2" style="font-size:20px" text-anchor="end">0</text><text class="tier" x="388" y="2" text-anchor="end" fill="#8b949e">baseline</text></g>
+  <text class="ev fade d4" x="32" y="216" fill="#8b949e">tracking since 2026-07-04 · a verdict is a chart, not a feeling</text>
+</svg>

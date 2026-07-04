@@ -23,7 +23,7 @@
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">Integration throughput</text>
   <text class="tier fade d1" x="396" y="34" text-anchor="end" fill="#ffd700">TOP 0.1%</text>
-  <text class="big fade d1" x="24" y="76">2,268</text>
+  <text class="big fade d1" x="24" y="76">2,286</text>
   <text class="ev fade d2" x="135" y="76">PRs/yr</text>
-  <text class="ev fade d2" x="24" y="104">2,268 pull requests opened in 12 months — ~43 reviewed,</text><text class="ev fade d3" x="24" y="120">mergeable units of work every week</text>
+  <text class="ev fade d2" x="24" y="104">2,286 pull requests opened in 12 months — ~43 reviewed,</text><text class="ev fade d3" x="24" y="120">mergeable units of work every week</text>
 </svg>

@@ -4,27 +4,34 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 from . import __version__
 from .detectors import REGISTRY, run_all
-from .github import collect
+from .github import collect, resolve_token
 from .models import Finding, Report
 from .render import render_all
+from .verdict import append_entry, collect_verdict, load_history, verdict_card
 
 
 def _compute(login: str, assets: Path) -> Report:
-    snapshot = collect(login)
+    token = resolve_token()
+    snapshot = collect(login, token)
+    now = datetime.now(timezone.utc)
     report = Report(
         login=login,
-        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        generated_at=now.strftime("%Y-%m-%d %H:%M UTC"),
         snapshot=snapshot,
         findings=run_all(snapshot),
     )
     assets.mkdir(parents=True, exist_ok=True)
     (assets / "metrics.json").write_text(json.dumps(report.to_dict(), indent=2))
+    showcase = os.environ.get("GITHUB_REPOSITORY", f"{login}/laurea")
+    entry = collect_verdict(snapshot, showcase, token, now.strftime("%Y-%m-%d"))
+    append_entry(entry, assets / "verdict.jsonl")
     return report
 
 
@@ -39,8 +46,12 @@ def _load(assets: Path) -> Report:
 
 
 def _render(report: Report, assets: Path) -> list[str]:
+    out = render_all(report)
+    history = load_history(assets / "verdict.jsonl")
+    if history:
+        out["cards/verdict.svg"] = verdict_card(history)
     written = []
-    for rel, content in render_all(report).items():
+    for rel, content in out.items():
         path = assets / rel
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)

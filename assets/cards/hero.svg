@@ -34,7 +34,7 @@
   <text class="ev fade d1" text-anchor="middle" x="400" y="118">computed, not claimed — recomputed daily from the live GitHub API · every floor cited</text>
   
   <g class="fade d1" transform="translate(70, 150)">
-    <text class="big" text-anchor="middle" x="60">26,432</text>
+    <text class="big" text-anchor="middle" x="60">26,476</text>
     <text class="ev" text-anchor="middle" x="60" y="24">contributions / yr</text>
   </g>
   <g class="fade d2" transform="translate(250, 150)">
@@ -42,7 +42,7 @@
     <text class="ev" text-anchor="middle" x="60" y="24">repos owned</text>
   </g>
   <g class="fade d3" transform="translate(430, 150)">
-    <text class="big" text-anchor="middle" x="60">2,268</text>
+    <text class="big" text-anchor="middle" x="60">2,286</text>
     <text class="ev" text-anchor="middle" x="60" y="24">PRs / yr</text>
   </g>
   <g class="fade d4" transform="translate(610, 150)">
