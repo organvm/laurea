@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="240" viewBox="0 0 800 240" role="img" aria-label="TOP 1% PYTHON FULL-STACK ENGINEER">
+  
+  <style>
+    .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
+    .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
+    .tier { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    .ev { font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
+    .fade { opacity: 0; animation: fadein 0.9s ease-out forwards; }
+    .d1 { animation-delay: 0.15s; } .d2 { animation-delay: 0.3s; }
+    .d3 { animation-delay: 0.45s; } .d4 { animation-delay: 0.6s; }
+    @keyframes fadein { to { opacity: 1; } }
+  </style>
+
+  <defs>
+  <linearGradient id="shH" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#9e7b2a"/>
+    <stop offset="50%" stop-color="#e3b341">
+      <animate attributeName="offset" values="0.2;0.8;0.2" dur="6s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="100%" stop-color="#9e7b2a"/>
+  </linearGradient>
+
+  <linearGradient id="shL" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#9e7b2a"/>
+    <stop offset="50%" stop-color="#e3b341">
+      <animate attributeName="offset" values="0.2;0.8;0.2" dur="6s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="100%" stop-color="#9e7b2a"/>
+  </linearGradient>
+</defs>
+  <rect width="799" height="239" x="0.5" y="0.5" rx="12" fill="#0d1117" stroke="#30363d"/>
+  <g transform="translate(400,78) scale(1.1)"><g transform="translate(-16,0)"><path d="M0,4 Q-3,-18 2,-42" stroke="url(#shL)" stroke-width="2" fill="none"/><ellipse cx="0" cy="-8" rx="6" ry="2.6" transform="rotate(-24 0 -8)" fill="url(#shL)"/><ellipse cx="0" cy="-15" rx="6" ry="2.6" transform="rotate(-29 0 -15)" fill="url(#shL)"/><ellipse cx="0" cy="-22" rx="6" ry="2.6" transform="rotate(-34 0 -22)" fill="url(#shL)"/><ellipse cx="0" cy="-29" rx="6" ry="2.6" transform="rotate(-39 0 -29)" fill="url(#shL)"/><ellipse cx="0" cy="-36" rx="6" ry="2.6" transform="rotate(-44 0 -36)" fill="url(#shL)"/></g><g transform="translate(16,0) scale(-1,1)"><path d="M0,4 Q-3,-18 2,-42" stroke="url(#shL)" stroke-width="2" fill="none"/><ellipse cx="0" cy="-8" rx="6" ry="2.6" transform="rotate(-24 0 -8)" fill="url(#shL)"/><ellipse cx="0" cy="-15" rx="6" ry="2.6" transform="rotate(-29 0 -15)" fill="url(#shL)"/><ellipse cx="0" cy="-22" rx="6" ry="2.6" transform="rotate(-34 0 -22)" fill="url(#shL)"/><ellipse cx="0" cy="-29" rx="6" ry="2.6" transform="rotate(-39 0 -29)" fill="url(#shL)"/><ellipse cx="0" cy="-36" rx="6" ry="2.6" transform="rotate(-44 0 -36)" fill="url(#shL)"/></g></g>
+  <text class="tier fade" fill="url(#shH)" text-anchor="middle" x="400" y="96" style="font-size:20px">TOP 1% PYTHON FULL-STACK ENGINEER</text>
+  <text class="ev fade d1" text-anchor="middle" x="400" y="118">computed, not claimed — recomputed daily from the live GitHub API · every floor cited</text>
+  
+  <g class="fade d1" transform="translate(70, 150)">
+    <text class="big" text-anchor="middle" x="60">26,428</text>
+    <text class="ev" text-anchor="middle" x="60" y="24">contributions / yr</text>
+  </g>
+  <g class="fade d2" transform="translate(250, 150)">
+    <text class="big" text-anchor="middle" x="60">271</text>
+    <text class="ev" text-anchor="middle" x="60" y="24">repos owned</text>
+  </g>
+  <g class="fade d3" transform="translate(430, 150)">
+    <text class="big" text-anchor="middle" x="60">2,268</text>
+    <text class="ev" text-anchor="middle" x="60" y="24">PRs / yr</text>
+  </g>
+  <g class="fade d4" transform="translate(610, 150)">
+    <text class="big" text-anchor="middle" x="60">10</text>
+    <text class="ev" text-anchor="middle" x="60" y="24">orgs operated</text>
+  </g>
+  <text class="ev fade d4" text-anchor="middle" x="400" y="222">LAVREA · the laurels are computed · github.com/4444J99/laurea</text>
+</svg>

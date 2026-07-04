@@ -1,0 +1,38 @@
+name: laurea
+
+on:
+  schedule:
+    - cron: "17 9 * * *" # daily, 09:17 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["src/**", "tests/**", "pyproject.toml", ".github/workflows/laurea.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  laurels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[test]'
+      - run: python -m pytest tests -q
+      - name: Recompute the laurels
+        env:
+          # A user PAT (LAUREA_TOKEN secret) also counts private contributions;
+          # the default token still measures the full public estate.
+          LAUREA_TOKEN: ${{ secrets.LAUREA_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: laurea run --login 4444J99
+      - name: Commit refreshed assets
+        run: |
+          git config user.name "laurea[bot]"
+          git config user.email "actions@github.com"
+          git add assets
+          git diff --cached --quiet && echo "laurels unchanged" && exit 0
+          git commit -m "laurels: recompute $(date -u +%F)"
+          git push
