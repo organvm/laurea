@@ -23,7 +23,7 @@
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">Contribution volume (12 months)</text>
   <text class="tier fade d1" x="396" y="34" text-anchor="end" fill="#ffd700">TOP 0.1%</text>
-  <text class="big fade d1" x="24" y="76">26,428</text>
+  <text class="big fade d1" x="24" y="76">26,429</text>
   <text class="ev fade d2" x="156" y="76">contributions/yr</text>
-  <text class="ev fade d2" x="24" y="104">26,428 contributions in the last 12 months (13,353</text><text class="ev fade d3" x="24" y="120">commits, 2,268 pull requests) — about 72 shipped units of</text><text class="ev fade d4" x="24" y="136">work every single day</text>
+  <text class="ev fade d2" x="24" y="104">26,429 contributions in the last 12 months (13,353</text><text class="ev fade d3" x="24" y="120">commits, 2,268 pull requests) — about 72 shipped units of</text><text class="ev fade d4" x="24" y="136">work every single day</text>
 </svg>
