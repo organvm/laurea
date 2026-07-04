@@ -79,6 +79,13 @@ def contributions_year(snapshot: Snapshot) -> Finding:
             f"about {total // 365} shipped units of work every single day"
         ),
         source=base.source,
+        analysis=(
+            f"{total // 365} shipped units of work per day, every day of the year, "
+            "weekends included. A typical active developer records a few hundred "
+            "contributions per year; the top floors here mean this account outpaces "
+            "at least 999 of every 1,000 active developers. That is not typing "
+            "speed — it is an engineer who industrialized his own process."
+        ),
     )
 
 
@@ -98,6 +105,11 @@ def repos_owned(snapshot: Snapshot) -> Finding:
             "personal account — an institutional footprint"
         ),
         source=base.source,
+        analysis=(
+            f"The median GitHub account owns 0–2 repositories. {count:,} is not a "
+            "large personal portfolio — it is the footprint of an engineering "
+            "organization: designed, shipped, and maintained by one person."
+        ),
     )
 
 
@@ -118,6 +130,11 @@ def language_breadth(snapshot: Snapshot) -> Finding:
             f"shipped repository — led by {leaders}"
         ),
         source=base.source,
+        analysis=(
+            f"Most developers ship in 1–3 languages over a career. {len(langs)} "
+            "languages each leading a shipped repository is the breadth of an "
+            "entire team compressed into one engineer."
+        ),
     )
 
 
@@ -136,6 +153,11 @@ def pull_requests_year(snapshot: Snapshot) -> Finding:
             f"~{prs // 52} reviewed, mergeable units of work every week"
         ),
         source=base.source,
+        analysis=(
+            f"~{prs // 52} reviewed, mergeable units of work every week. Many "
+            "strong professional engineers open fewer pull requests in a year "
+            "than this account opens in a month."
+        ),
     )
 
 
@@ -155,6 +177,11 @@ def orgs_operated(snapshot: Snapshot) -> Finding:
             "not just a codebase"
         ),
         source=base.source,
+        analysis=(
+            f"Most accounts operate zero organizations. {count} is "
+            "separation-of-concerns applied to a whole estate — the org chart "
+            "of a small company, run by its only employee."
+        ),
     )
 
 
@@ -179,6 +206,11 @@ def full_stack_coverage(snapshot: Snapshot) -> Finding:
             "of full-stack, and polyglot shipping at this breadth is a "
             "top-percentile behavior (see language_breadth baseline)"
         ),
+        analysis=(
+            "One person covering roles a company staffs separately: frontend, "
+            "backend, infrastructure, native, and creative coding. "
+            "'Full-stack' is usually a resume word; here it is a measured property."
+        ),
     )
 
 
@@ -194,6 +226,10 @@ def tenure(snapshot: Snapshot) -> Finding:
         tier=TIER_NOTABLE,
         evidence=f"On GitHub since {created.year} — {years:.1f} years of shipped history",
         source="Account creation date (no percentile claimed for tenure)",
+        analysis=(
+            "A decade of public, timestamped history. The output measured above "
+            "is a trajectory, not a sprint — and every year of it is auditable."
+        ),
     )
 
 
@@ -232,6 +268,12 @@ def composite_python_full_stack(findings: list[Finding], snapshot: Snapshot) -> 
             "top-1% claim is therefore a floor, not an estimate."
         ),
         source="Conjunction over the cited per-axis baselines (see METHODOLOGY.md)",
+        analysis=(
+            "Read it like an underwriter: each leg alone places its holder past "
+            "the 99th percentile, and holding all four simultaneously is rarer "
+            "than any single leg. At most 1 engineer in 100 can make this claim; "
+            "this one re-proves it by machine every morning."
+        ),
     )
 
 

@@ -97,3 +97,18 @@ def test_rendered_svgs_are_valid_xml_with_animation():
         assert "animate" in assets[key] or "@keyframes" in assets[key]
     assert "TOP 1% PYTHON FULL-STACK ENGINEER" in assets["cards/hero.svg"]
     assert "METHODOLOGY.md" in assets["SUPERLATIVES.md"]
+
+
+def test_every_measured_finding_carries_analysis():
+    for f in run_all(_snapshot()):
+        assert f.analysis, f"{f.axis} rendered without analysis — a datum needs context"
+
+
+def test_superlatives_translate_tiers_into_odds():
+    snapshot = _snapshot()
+    report = Report(
+        login="tester", generated_at="2026-07-04 00:00 UTC",
+        snapshot=snapshot, findings=run_all(snapshot),
+    )
+    md = render_all(report)["SUPERLATIVES.md"]
+    assert "at least 1 in 1,000" in md and "What this means:" in md

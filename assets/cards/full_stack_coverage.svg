@@ -23,6 +23,7 @@
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">Full-stack coverage</text>
   <text class="tier fade d1" x="396" y="34" text-anchor="end" fill="#e3b341">TOP 1%</text>
+  <text class="ev fade d2" x="396" y="50" text-anchor="end">at least 1 in 100</text>
   <text class="big fade d1" x="24" y="76">5</text>
   <text class="ev fade d2" x="51" y="76">stack layers</text>
   <text class="ev fade d2" x="24" y="104">Shipped repositories lead in 5 distinct stack layers:</text><text class="ev fade d3" x="24" y="120">backend, creative, frontend, infra, native — frontend</text><text class="ev fade d4" x="24" y="136">through infrastructure in one pair of hands</text>

@@ -23,6 +23,7 @@
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">Tenure</text>
   <text class="tier fade d1" x="396" y="34" text-anchor="end" fill="#8b949e">NOTABLE</text>
+  
   <text class="big fade d1" x="24" y="76">9.5</text>
   <text class="ev fade d2" x="93" y="76">years</text>
   <text class="ev fade d2" x="24" y="104">On GitHub since 2016 — 9.5 years of shipped history</text>

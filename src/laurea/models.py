@@ -13,7 +13,9 @@ class Finding:
     ``tier`` is a conservative percentile *floor* ("top 0.1%", "top 1%",
     "top 5%", "notable") — never a point estimate. ``evidence`` is the
     exact measured value in words; ``source`` cites the baseline the
-    floor was read from.
+    floor was read from; ``analysis`` translates the number into human
+    scale — a datum without analysis is noise, so every finding carries
+    its own context.
     """
 
     axis: str
@@ -23,6 +25,7 @@ class Finding:
     tier: str
     evidence: str
     source: str
+    analysis: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

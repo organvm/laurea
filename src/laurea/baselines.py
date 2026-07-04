@@ -115,6 +115,18 @@ BASELINES: dict[str, Baseline] = {
 }
 
 
+# Human translation of a floor: what the tier means as odds. Floors, so "at least".
+TIER_ODDS = {
+    TIER_TOP_01: "at least 1 in 1,000",
+    TIER_TOP_1: "at least 1 in 100",
+    TIER_TOP_5: "at least 1 in 20",
+}
+
+
+def odds_for(tier: str) -> str | None:
+    return TIER_ODDS.get(tier)
+
+
 def tier_rank(tier: str) -> int:
     """Lower is stronger; useful for sorting findings by strength."""
     return _TIER_ORDER.index(tier)

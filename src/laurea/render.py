@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from xml.sax.saxutils import escape
 
-from .baselines import TIER_TOP_01, TIER_TOP_1, TIER_TOP_5
+from .baselines import TIER_TOP_01, TIER_TOP_1, TIER_TOP_5, odds_for
 from .models import Finding, Report
 
 GOLD = "#e3b341"
@@ -118,7 +118,7 @@ def hero_card(report: Report) -> str:
   <rect width="799" height="239" x="0.5" y="0.5" rx="12" fill="{BG}" stroke="{BORDER}"/>
   {_laurel(400, 78, 1.1)}
   <text class="tier fade" fill="url(#shH)" text-anchor="middle" x="400" y="96" style="font-size:20px">{escape(headline)}</text>
-  <text class="ev fade d1" text-anchor="middle" x="400" y="118">computed, not claimed — recomputed daily from the live GitHub API · every floor cited</text>
+  <text class="ev fade d1" text-anchor="middle" x="400" y="118">computed, not claimed — every floor is odds you can read: top 1% means at least 1 in 100, top 0.1% at least 1 in 1,000</text>
   {cols}
   <text class="ev fade d4" text-anchor="middle" x="400" y="222">LAVREA · the laurels are computed · github.com/{escape(report.login)}/laurea</text>
 </svg>
@@ -138,6 +138,7 @@ def axis_card(finding: Finding) -> str:
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="{PANEL}" stroke="{BORDER}"/>
   <text class="t fade" x="24" y="34">{escape(finding.title)}</text>
   <text class="tier fade d1" x="396" y="34" text-anchor="end" fill="{color}">{escape(finding.tier.upper())}</text>
+  {f'<text class="ev fade d2" x="396" y="50" text-anchor="end">{escape(odds)}</text>' if (odds := odds_for(finding.tier)) else ""}
   <text class="big fade d1" x="24" y="76">{escape(_fmt(finding.value))}</text>
   <text class="ev fade d2" x="{30 + 21 * len(_fmt(finding.value))}" y="76">{escape(finding.unit)}</text>
   {ev}
@@ -157,16 +158,19 @@ def superlatives_md(report: Report) -> str:
         "",
     ]
     for f in report.findings:
+        odds = odds_for(f.tier)
+        heading = f"## {f.title} — **{f.tier}**" + (f" *({odds})*" if odds else "")
         lines += [
-            f"## {f.title} — **{f.tier}**",
+            heading,
             "",
             f"**Measured:** {f.value:,.0f} {f.unit}",
             "",
             f"{f.evidence}.",
             "",
-            f"*Baseline: {f.source}.*",
-            "",
         ]
+        if f.analysis:
+            lines += [f"**What this means:** {f.analysis}", ""]
+        lines += [f"*Baseline: {f.source}.*", ""]
     return "\n".join(lines)
 
 
