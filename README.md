@@ -51,7 +51,8 @@ a chart, not a feeling:
 Anyone can put "top 1%" in a bio. LAVREA makes it a **theorem with
 measured premises** — and scopes it honestly: the composite classifies a
 top-1% *output profile* (scale, breadth, operational complexity — the
-orchestration skillset of AI-native engineering), not a universal
+orchestration skillset: architecture, decomposition, specification,
+verification, integration), not a universal
 ranking of ability. Quality, correctness, and adoption are different
 questions needing different evidence; the report renders what it does
 *not* establish right next to what it does.

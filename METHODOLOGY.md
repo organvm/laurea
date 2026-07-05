@@ -5,9 +5,12 @@
 LAVREA classifies a measured **output profile** — the scale, breadth, and
 operational complexity of shipped GitHub work. It is a rule-based,
 reproducible descriptor, not a peer-reviewed ranking of engineering
-ability. In the AI-assisted era these metrics track the orchestration
-skills (architecture, decomposition, specification, verification,
-integration) rather than typing speed — and they say nothing about code
+ability. Contribution volume at this scale measures *orchestration* —
+architecture, decomposition, specification, verification, integration
+across an automated, agent-amplified development system — rather than
+typing speed. That is disclosed here, in the fine print, because an
+instrument that hides its era stops being an instrument. It says
+nothing about code
 quality, correctness, reliability, adoption, or impact, which require
 different evidence. Every generated report renders that negative space
 explicitly ("What these numbers do not establish").
