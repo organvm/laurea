@@ -1,14 +1,14 @@
 # SUPERLATIVES
 
-*Generated 2026-07-05 16:49 UTC for [@4444J99](https://github.com/4444J99). Every claim below is recomputed from the live GitHub API; every percentile is a conservative floor with a cited baseline (see [METHODOLOGY.md](METHODOLOGY.md)).*
+*Generated 2026-07-06 12:58 UTC for [@4444J99](https://github.com/4444J99). Every claim below is recomputed from the live GitHub API; every percentile is a conservative floor with a cited baseline (see [METHODOLOGY.md](METHODOLOGY.md)).*
 
 ## Contribution volume (12 months) — **top 0.1%** *(at least 1 in 1,000)*
 
-**Measured:** 26,522 contributions/yr
+**Measured:** 26,798 contributions/yr
 
-26,522 contributions in the last 12 months (13,408 commits, 2,294 pull requests) — about 72 shipped units of work every single day.
+26,798 contributions in the last 12 months (12,566 commits, 2,250 pull requests) — about 73 shipped units of work every single day.
 
-**What this means:** 72 shipped units of work per day, every day of the year, weekends included. A typical active developer records a few hundred contributions per year; the top floors here mean this account outpaces at least 999 of every 1,000 active developers. That is not typing speed — it is an engineer who industrialized his own process.
+**What this means:** 73 shipped units of work per day, every day of the year, weekends included. A typical active developer records a few hundred contributions per year; the top floors here mean this account outpaces at least 999 of every 1,000 active developers. That is not typing speed — it is an engineer who industrialized his own process.
 
 **Out of how many people:** the top 0.1% floor, taken against ≈30M annually active developers, is a worldwide cohort of at most ~30,000 people — fewer people than fill one large stadium.
 
@@ -16,11 +16,11 @@
 
 ## Integration throughput — **top 0.1%** *(at least 1 in 1,000)*
 
-**Measured:** 2,294 PRs/yr
+**Measured:** 2,250 PRs/yr
 
-2,294 pull requests opened in 12 months — ~44 reviewed, mergeable units of work every week.
+2,250 pull requests opened in 12 months — ~43 reviewed, mergeable units of work every week.
 
-**What this means:** ~44 reviewed, mergeable units of work every week. Many strong professional engineers open fewer pull requests in a year than this account opens in a month.
+**What this means:** ~43 reviewed, mergeable units of work every week. Many strong professional engineers open fewer pull requests in a year than this account opens in a month.
 
 **Out of how many people:** the top 0.1% floor, taken against ≈30M annually active developers, is a worldwide cohort of at most ~30,000 people — fewer people than fill one large stadium.
 
@@ -78,7 +78,7 @@ Shipped repositories lead in 5 distinct stack layers: backend, creative, fronten
 
 **Measured:** 1 percentile floor
 
-Conjunction holds: 26,522 contributions/yr (top-1% floor cleared), 272 owned repos (top-1% floor cleared), Python leads the corpus (101 repos), and shipped code spans 5 stack layers. A conjunction of independent top-1% conditions is at most as common as its rarest member — the composite top-1% claim is therefore a floor, not an estimate..
+Conjunction holds: 26,798 contributions/yr (top-1% floor cleared), 272 owned repos (top-1% floor cleared), Python leads the corpus (101 repos), and shipped code spans 5 stack layers. A conjunction of independent top-1% conditions is at most as common as its rarest member — the composite top-1% claim is therefore a floor, not an estimate..
 
 **What this means:** Read it like an underwriter: each leg alone places its holder past the 99th percentile, and holding all four simultaneously is rarer than any single leg. At most 1 engineer in 100 can make this claim; this one re-proves it by machine every morning.
 
