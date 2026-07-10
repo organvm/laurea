@@ -1,0 +1,3 @@
+# Discovery Thesis: LAVREA (organvm/laurea)
+
+LAVREA's highest latent value is as a **provable, zero-trust developer credentialing engine and high-signal lead magnet**. By automatically evaluating a GitHub identity's output against conservative population baselines and rendering verifiable visual proofs, it acts as a self-propagating credential. For the broader estate, it serves as a reusable asset to attract, filter, and verify top-tier engineering talent, or as a standalone product (e.g., a premium API or enterprise audit tool). The single best concrete first task to arm this value is to **inject a self-serve lead capture or revenue-routing call-to-action into the generated SVG laurel artifacts**, turning every publicly embedded laurel into an inbound funnel.
