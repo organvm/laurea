@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 from laurea.baselines import BASELINES, TIER_TOP_01, TIER_TOP_1, TIER_NOTABLE
 from laurea.detectors import run_all
@@ -95,8 +96,14 @@ def test_rendered_svgs_are_valid_xml_with_animation():
         root = ET.fromstring(assets[key])  # raises on invalid XML
         assert root.tag.endswith("svg")
         assert "animate" in assets[key] or "@keyframes" in assets[key]
-    assert "TOP 0.1% ENGINEERING THROUGHPUT" in assets["cards/hero.svg"]
+    assert "TOP 1% GITHUB OUTPUT PROFILE" in assets["cards/hero.svg"]
+    assert "TOP 0.1% ENGINEERING THROUGHPUT" not in assets["cards/hero.svg"]
     assert "output profile" in assets["cards/hero.svg"]
+    assert "GitHub contributions · trailing 12 months" in assets["cards/hero.svg"]
+    assert "non-fork repositories visible to this run" in assets["cards/hero.svg"]
+    assert "pull requests opened · trailing 12 months" in assets["cards/hero.svg"]
+    assert "organizations queried" in assets["cards/hero.svg"]
+    assert "does not establish quality, reliability, adoption, or business impact" in assets["cards/hero.svg"]
     assert "METHODOLOGY.md" in assets["SUPERLATIVES.md"]
     assert "do not establish" in assets["SUPERLATIVES.md"]
 
@@ -124,3 +131,25 @@ def test_cohort_math_is_floor_times_population():
     n, _ = cohort_for("top 1%")
     assert n == 300_000
     assert cohort_for("notable") is None
+
+
+def test_scheduled_workflow_tracks_the_declared_subject():
+    workflow = Path(".github/workflows/laurea.yml").read_text()
+    assert 'laurea run --login "4444J99"' in workflow
+    assert "github.repository_owner" not in workflow
+
+
+def test_report_contract_carries_source_and_subject_identity():
+    snapshot = _snapshot(login="4444J99")
+    report = Report(
+        login="4444J99",
+        generated_at="2026-08-20T12:00:00Z",
+        snapshot=snapshot,
+        findings=run_all(snapshot),
+        source_repository="organvm/laurea",
+        source_sha="abc123",
+    ).to_dict()
+    assert report["login"] == report["snapshot"]["login"] == "4444J99"
+    assert report["generated_at"].endswith("Z")
+    assert report["source_repository"] == "organvm/laurea"
+    assert report["source_sha"] == "abc123"
