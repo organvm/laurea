@@ -96,7 +96,7 @@ def test_rendered_svgs_are_valid_xml_with_animation():
         root = ET.fromstring(assets[key])  # raises on invalid XML
         assert root.tag.endswith("svg")
         assert "animate" in assets[key] or "@keyframes" in assets[key]
-    assert "TOP 1% GITHUB OUTPUT PROFILE" in assets["cards/hero.svg"]
+    assert "Top 1% GitHub output profile" in assets["cards/hero.svg"]
     assert "TOP 0.1% ENGINEERING THROUGHPUT" not in assets["cards/hero.svg"]
     assert "output profile" in assets["cards/hero.svg"]
     assert "GitHub contributions · trailing 12 months" in assets["cards/hero.svg"]

@@ -105,7 +105,7 @@ def _wrap(text: str, width: int) -> list[str]:
 def hero_card(report: Report) -> str:
     composite = report.by_axis("composite_python_full_stack")
     headline = (
-        f"{composite.tier.upper()} GITHUB OUTPUT PROFILE"
+        f"{composite.tier.title()} GitHub output profile"
         if composite
         else "GITHUB OUTPUT PROFILE — MEASURED"
     )
