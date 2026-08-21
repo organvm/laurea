@@ -1,14 +1,21 @@
-"""Tests: floor logic, detector conjunction honesty, valid SVG output."""
+"""Tests for bounded snapshot semantics, provenance, and rendering."""
 
 from __future__ import annotations
 
+import json
 import xml.etree.ElementTree as ET
+from datetime import datetime
 from pathlib import Path
 
-from laurea.baselines import BASELINES, TIER_TOP_01, TIER_TOP_1, TIER_NOTABLE
+import pytest
+
+from laurea.baselines import STATUS_DERIVED, STATUS_MEASURED
+from laurea.cli import _compute, _load, _render
 from laurea.detectors import run_all
+from laurea.github import collect
 from laurea.models import Report
-from laurea.render import render_all
+from laurea.render import CARD_BOUNDARY, PUBLIC_LIMITATION, render_all
+from laurea.verdict import verdict_card
 
 
 def _snapshot(**overrides):
@@ -17,139 +24,241 @@ def _snapshot(**overrides):
         "name": "Tester",
         "created_at": "2016-12-27T17:24:06Z",
         "followers": 38,
-        "orgs": [f"org{i}" for i in range(10)],
+        "orgs": [f"org{index}" for index in range(10)],
         "repos": (
-            [{"name": f"py{i}", "isFork": False, "isArchived": False,
-              "stargazerCount": 1, "pushedAt": None,
-              "primaryLanguage": {"name": "Python"}} for i in range(120)]
-            + [{"name": f"ts{i}", "isFork": False, "isArchived": False,
-                "stargazerCount": 0, "pushedAt": None,
-                "primaryLanguage": {"name": lang}} for i, lang in enumerate(
-                    ["TypeScript"] * 60 + ["JavaScript"] * 10 + ["Shell"] * 6
-                    + ["Swift", "Kotlin", "Astro", "HTML", "SuperCollider",
-                       "G-code", "CSS", "Ruby"])]
+            [
+                {
+                    "name": f"py{index}",
+                    "isFork": False,
+                    "isArchived": False,
+                    "stargazerCount": 1,
+                    "pushedAt": None,
+                    "primaryLanguage": {"name": "Python"},
+                }
+                for index in range(12)
+            ]
+            + [
+                {
+                    "name": f"other{index}",
+                    "isFork": False,
+                    "isArchived": False,
+                    "stargazerCount": 0,
+                    "pushedAt": None,
+                    "primaryLanguage": {"name": language},
+                }
+                for index, language in enumerate(
+                    ["TypeScript", "JavaScript", "Shell", "Swift", "SuperCollider"]
+                )
+            ]
         ),
         "contributions": {
-            "total": 26_000, "commits": 13_000, "pull_requests": 2_200,
-            "reviews": 100, "issues": 500, "restricted": 8_000,
+            "total": 26_000,
+            "commits": 13_000,
+            "pull_requests": 2_200,
+            "reviews": 100,
+            "issues": 500,
+            "restricted": 8_000,
         },
     }
     base.update(overrides)
     return base
 
 
-def test_floors_are_conservative_and_ordered():
-    for base in BASELINES.values():
-        thresholds = [t for t, _ in base.floors]
-        assert thresholds == sorted(thresholds, reverse=True), base.axis
-        assert base.source and base.method, base.axis
-
-
-def test_tier_for_reads_first_cleared_floor():
-    b = BASELINES["contributions_year"]
-    assert b.tier_for(26_000) == TIER_TOP_01
-    assert b.tier_for(6_000) == TIER_TOP_1
-    assert b.tier_for(10) == TIER_NOTABLE
-
-
-def test_composite_renders_when_all_legs_clear():
-    findings = run_all(_snapshot())
-    composite = [f for f in findings if f.axis == "composite_python_full_stack"]
-    assert len(composite) == 1
-    assert composite[0].tier == TIER_TOP_1
-
-
-def test_composite_deletes_itself_when_a_leg_fails():
-    weak = _snapshot()
-    weak["contributions"] = dict(weak["contributions"], total=800)
-    findings = run_all(weak)
-    assert not [f for f in findings if f.axis == "composite_python_full_stack"]
-
-
-def test_composite_requires_python_led_corpus():
-    js_led = _snapshot()
-    for repo in js_led["repos"][:200]:
-        repo["primaryLanguage"] = {"name": "JavaScript"}
-    findings = run_all(js_led)
-    assert not [f for f in findings if f.axis == "composite_python_full_stack"]
-
-
-def test_forks_do_not_count_toward_portfolio():
-    forked = _snapshot()
-    for repo in forked["repos"]:
-        repo["isFork"] = True
-    findings = run_all(forked)
-    repos = next(f for f in findings if f.axis == "repos_owned")
-    assert repos.value == 0
-
-
-def test_rendered_svgs_are_valid_xml_with_animation():
+def _report() -> Report:
     snapshot = _snapshot()
-    report = Report(
-        login="tester", generated_at="2026-07-04 00:00 UTC",
-        snapshot=snapshot, findings=run_all(snapshot),
-    )
-    assets = render_all(report)
-    svgs = [k for k in assets if k.endswith(".svg")]
-    assert "cards/hero.svg" in svgs and len(svgs) >= 6
-    for key in svgs:
-        root = ET.fromstring(assets[key])  # raises on invalid XML
-        assert root.tag.endswith("svg")
-        assert "animate" in assets[key] or "@keyframes" in assets[key]
-    assert "Top 1% GitHub output profile" in assets["cards/hero.svg"]
-    assert "TOP 0.1% ENGINEERING THROUGHPUT" not in assets["cards/hero.svg"]
-    assert "output profile" in assets["cards/hero.svg"]
-    assert "GitHub contributions · trailing 12 months" in assets["cards/hero.svg"]
-    assert "non-fork repositories visible to this run" in assets["cards/hero.svg"]
-    assert "pull requests opened · trailing 12 months" in assets["cards/hero.svg"]
-    assert "organizations queried" in assets["cards/hero.svg"]
-    assert "does not establish quality, reliability, adoption, or business impact" in assets["cards/hero.svg"]
-    assert "METHODOLOGY.md" in assets["SUPERLATIVES.md"]
-    assert "do not establish" in assets["SUPERLATIVES.md"]
-
-
-def test_every_measured_finding_carries_analysis():
-    for f in run_all(_snapshot()):
-        assert f.analysis, f"{f.axis} rendered without analysis — a datum needs context"
-
-
-def test_superlatives_translate_tiers_into_odds():
-    snapshot = _snapshot()
-    report = Report(
-        login="tester", generated_at="2026-07-04 00:00 UTC",
-        snapshot=snapshot, findings=run_all(snapshot),
-    )
-    md = render_all(report)["SUPERLATIVES.md"]
-    assert "at least 1 in 1,000" in md and "What this means:" in md
-    assert "at most ~30,000 people" in md and "The denominators" in md
-
-
-def test_cohort_math_is_floor_times_population():
-    from laurea.baselines import cohort_for
-    n, anchor = cohort_for("top 0.1%")
-    assert n == 30_000 and "stadium" in anchor
-    n, _ = cohort_for("top 1%")
-    assert n == 300_000
-    assert cohort_for("notable") is None
-
-
-def test_scheduled_workflow_tracks_the_declared_subject():
-    workflow = Path(".github/workflows/laurea.yml").read_text()
-    assert 'laurea run --login "4444J99"' in workflow
-    assert "github.repository_owner" not in workflow
-
-
-def test_report_contract_carries_source_and_subject_identity():
-    snapshot = _snapshot(login="4444J99")
-    report = Report(
-        login="4444J99",
+    return Report(
+        login="tester",
         generated_at="2026-08-20T12:00:00Z",
         snapshot=snapshot,
         findings=run_all(snapshot),
         source_repository="organvm/laurea",
-        source_sha="abc123",
-    ).to_dict()
-    assert report["login"] == report["snapshot"]["login"] == "4444J99"
-    assert report["generated_at"].endswith("Z")
-    assert report["source_repository"] == "organvm/laurea"
-    assert report["source_sha"] == "abc123"
+        source_sha="abc1234",
+    )
+
+
+def test_findings_are_measurements_or_transformations_not_rankings():
+    findings = run_all(_snapshot())
+    assert {finding.status for finding in findings} == {STATUS_MEASURED, STATUS_DERIVED}
+    serialized = json.dumps([finding.to_dict() for finding in findings]).lower()
+    rendered_evidence = json.dumps([finding.evidence for finding in findings]).lower()
+    assert "percentile" not in serialized
+    assert "top 1%" not in serialized
+    assert "reviewed, mergeable" not in rendered_evidence
+    assert "shipped units" not in rendered_evidence
+    tenure_finding = next(finding for finding in findings if finding.axis == "tenure")
+    assert tenure_finding.status == STATUS_DERIVED
+
+
+def test_contribution_fields_are_not_presented_as_an_additive_breakdown():
+    finding = next(
+        item for item in run_all(_snapshot()) if item.axis == "contributions_year"
+    )
+    assert "not an additive breakdown" in finding.evidence
+
+
+def test_repository_visibility_is_not_attributed_as_individual_ownership():
+    finding = next(
+        item for item in run_all(_snapshot()) if item.axis == "repos_visible"
+    )
+    assert finding.value == 17
+    assert "visible" in finding.evidence.lower()
+    assert "authorship" in finding.analysis.lower()
+
+
+def test_forks_do_not_enter_the_visible_non_fork_count():
+    snapshot = _snapshot()
+    for repository in snapshot["repos"]:
+        repository["isFork"] = True
+    finding = next(item for item in run_all(snapshot) if item.axis == "repos_visible")
+    assert finding.value == 0
+
+
+@pytest.mark.parametrize(
+    "repos",
+    [None, [{}], [{"isFork": None}], ["repository"]],
+)
+def test_malformed_repository_entries_fail_closed(repos):
+    with pytest.raises(ValueError, match="isFork"):
+        run_all(_snapshot(repos=repos))
+
+
+def test_rendered_assets_are_valid_and_wrap_bounded_hero_copy():
+    assets = render_all(_report())
+    assert "cards/hero.svg" in assets
+    assert "PROFILE.md" in assets
+    assert "SUPERLATIVES.md" not in assets
+    for path, content in assets.items():
+        if path.endswith(".svg"):
+            root = ET.fromstring(content)
+            assert root.tag.endswith("svg")
+    hero = assets["cards/hero.svg"]
+    assert "Measured GitHub activity profile" in hero
+    assert "organization memberships" in hero
+    assert hero.count("<tspan") >= 9
+    assert ".fade { opacity: 1; }" in hero
+    assert "animation: fadein" not in hero
+    rendered_text = " ".join(" ".join(ET.fromstring(hero).itertext()).split())
+    assert PUBLIC_LIMITATION in rendered_text
+    assert "Top 1%" not in hero
+
+    language_card = assets["cards/language_breadth.svg"]
+    language_root = ET.fromstring(language_card)
+    heading = next(
+        element.text
+        for element in language_root.iter()
+        if element.attrib.get("y") == "34"
+    )
+    assert heading.endswith("…")
+    assert CARD_BOUNDARY in " ".join(language_root.itertext())
+
+
+def test_profile_states_boundaries_and_never_duplicates_terminal_periods():
+    profile = render_all(_report())["PROFILE.md"]
+    assert "No percentile ranking is published" in profile
+    assert "does not establish" in profile
+    assert ".." not in profile
+    assert "**Observed:** 9.6 years" in profile
+    assert "`organvm/laurea` at `abc1234`" in profile
+
+
+def test_verdict_card_retains_tier_styling():
+    card = verdict_card([{"date": "2026-08-20", "followers": 1, "stars_estate": 2}])
+    assert ".status, .tier" in card
+    assert 'class="tier fade"' in card
+
+
+def test_render_removes_withdrawn_ranked_artifacts(tmp_path):
+    legacy_paths = (
+        "SUPERLATIVES.md",
+        "cards/repos_owned.svg",
+        "cards/orgs_operated.svg",
+        "cards/full_stack_coverage.svg",
+    )
+    for relative_path in legacy_paths:
+        path = tmp_path / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("withdrawn ranking")
+
+    _render(_report(), tmp_path)
+
+    assert all(
+        not (tmp_path / relative_path).exists() for relative_path in legacy_paths
+    )
+
+
+def test_compute_records_environment_provenance_and_utc_time(monkeypatch, tmp_path):
+    snapshot = _snapshot(login="4444J99")
+    monkeypatch.setattr("laurea.cli.resolve_token", lambda: "token")
+    monkeypatch.setattr("laurea.cli.collect", lambda login, _auth: snapshot)
+    monkeypatch.setattr(
+        "laurea.cli.collect_verdict", lambda *args: {"date": "2026-08-20"}
+    )
+    monkeypatch.setattr("laurea.cli.append_entry", lambda *args: None)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "organvm/laurea")
+    monkeypatch.setenv("GITHUB_SHA", "abc1234")
+
+    report = _compute("4444J99", tmp_path)
+    generated = datetime.fromisoformat(report.generated_at)
+    assert generated.utcoffset().total_seconds() == 0
+    assert report.source_repository == "organvm/laurea"
+    assert report.source_sha == "abc1234"
+
+
+def test_compute_and_load_use_honest_unknown_provenance(monkeypatch, tmp_path):
+    snapshot = _snapshot()
+    monkeypatch.setattr("laurea.cli.resolve_token", lambda: "token")
+    monkeypatch.setattr("laurea.cli.collect", lambda login, _auth: snapshot)
+    monkeypatch.setattr(
+        "laurea.cli.collect_verdict", lambda *args: {"date": "2026-08-20"}
+    )
+    monkeypatch.setattr("laurea.cli.append_entry", lambda *args: None)
+    monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
+    monkeypatch.delenv("GITHUB_SHA", raising=False)
+    report = _compute("tester", tmp_path)
+    assert report.source_repository == "unknown"
+    assert report.source_sha == "unknown"
+
+    payload = report.to_dict()
+    payload.pop("source_repository")
+    payload.pop("source_sha")
+    (tmp_path / "metrics.json").write_text(json.dumps(payload))
+    loaded = _load(tmp_path)
+    assert loaded.source_repository == "unknown"
+    assert loaded.source_sha == "unknown"
+
+
+def test_load_rejects_legacy_schema_and_unknown_status(tmp_path):
+    payload = _report().to_dict()
+    payload["schema_version"] = "laurea.report.v1"
+    (tmp_path / "metrics.json").write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match="unsupported metrics schema"):
+        _load(tmp_path)
+
+    payload["schema_version"] = "laurea.report.v2"
+    payload["findings"][0]["status"] = "ranked"
+    (tmp_path / "metrics.json").write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match="measured or derived"):
+        _load(tmp_path)
+
+
+def test_boolean_contribution_counts_fail_closed():
+    contributions = _snapshot()["contributions"]
+    contributions["commits"] = True
+    with pytest.raises(ValueError, match="incomplete counts"):
+        run_all(_snapshot(contributions=contributions))
+
+
+def test_non_user_subject_fails_before_repository_pagination(monkeypatch):
+    monkeypatch.setattr("laurea.github._gql", lambda *_args, **_kwargs: {"user": None})
+    with pytest.raises(ValueError, match="not a user"):
+        collect("organization-login", "token")
+
+
+def test_scheduled_workflow_selects_canonical_subject_without_breaking_forks():
+    workflow = (
+        Path(__file__).resolve().parents[1] / ".github" / "workflows" / "laurea.yml"
+    ).read_text()
+    assert "github.repository == 'organvm/laurea'" in workflow
+    assert "vars.LAUREA_LOGIN" in workflow
+    assert "github.repository_owner" in workflow
+    assert 'laurea run --login "$LAUREA_LOGIN"' in workflow

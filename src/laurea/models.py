@@ -8,21 +8,19 @@ from typing import Any
 
 @dataclass(frozen=True)
 class Finding:
-    """One measured axis of engineering output.
+    """One bounded observation derived from a GitHub API snapshot.
 
-    ``tier`` is a conservative percentile *floor* ("top 0.1%", "top 1%",
-    "top 5%", "notable") — never a point estimate. ``evidence`` is the
-    exact measured value in words; ``source`` cites the baseline the
-    floor was read from; ``analysis`` translates the number into human
-    scale — a datum without analysis is noise, so every finding carries
-    its own context.
+    ``status`` distinguishes direct API measurements from deterministic
+    transformations. It is not a percentile, quality grade, or ranking.
+    ``source`` names the exact field or transformation and ``analysis``
+    states what the observation does and does not establish.
     """
 
     axis: str
     title: str
     value: float
     unit: str
-    tier: str
+    status: str
     evidence: str
     source: str
     analysis: str = ""
@@ -39,11 +37,12 @@ class Report:
     generated_at: str
     snapshot: dict[str, Any]
     findings: list[Finding] = field(default_factory=list)
-    source_repository: str = "organvm/laurea"
+    source_repository: str = "unknown"
     source_sha: str = "unknown"
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "schema_version": "laurea.report.v2",
             "login": self.login,
             "generated_at": self.generated_at,
             "source_repository": self.source_repository,

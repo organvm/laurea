@@ -1,12 +1,11 @@
-# THE ARENA — verified laurels
+# THE ARENA — GitHub activity snapshots
 
-Every row below was computed by CI from the live GitHub API at the
-moment of entry — nobody reports their own numbers. Enter by opening an
-issue titled `arena: your-login`. Same floors, same citations, same
-public-estate rules for everyone (see [METHODOLOGY.md](METHODOLOGY.md)).
+Every row below was computed from the GitHub API at the recorded time.
+Rows are comparable only under the same field definitions and token visibility.
+They are not rankings of engineering quality, authorship, or impact.
 
 <!-- arena:rows:start -->
-| # | login | contributions/yr | PRs/yr | repos | languages | best floor | verified |
-|---|-------|-----------------:|-------:|------:|----------:|------------|----------|
-| 1 | `@4444J99` | 26,527 | 2,295 | 175 | 12 | top 0.1% | 2026-07-05 |
+| # | login | contribution events | PRs opened | visible repos | languages | measured axes | verified |
+|---|-------|--------------------:|-----------:|--------------:|----------:|--------------:|----------|
+| 1 | `@4444J99` | 33,587 | 4,191 | 290 | 17 | 4 | 2026-08-21 |
 <!-- arena:rows:end -->

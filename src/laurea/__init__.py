@@ -1,13 +1,8 @@
-"""LAVREA — the laurels are computed.
+"""LAVREA — a provenance-bearing GitHub activity snapshot and renderer.
 
-An evidence-backed excellence engine. It collects a live snapshot of a
-GitHub identity (every org, every repo, every contribution), runs a
-registry of detectors that each measure one axis of engineering output,
-assigns every measurement a *conservative percentile floor* from cited
-population baselines, and renders only the claims the data supports.
-
-Nothing here is self-description. Every laurel is recomputed from the
-API on a schedule; delete the data and the claims delete themselves.
+The package reports bounded API observations and deterministic corpus
+descriptions. It does not infer percentile rank, quality, authorship, or
+impact from activity volume.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

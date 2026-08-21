@@ -133,6 +133,10 @@ def collect(login: str, token: str | None = None) -> dict[str, Any]:
     """Collect the full identity snapshot: user, orgs, every owned repo."""
     token = token or resolve_token()
     user = _gql(_USER_QUERY, {"login": login}, token)["user"]
+    if not isinstance(user, dict):
+        raise ValueError(
+            f"GitHub login @{login} is not a user; set LAUREA_LOGIN to a user account"
+        )
 
     repos = _paginate_repos(
         _USER_REPOS_QUERY, ["user", "repositories"], {"login": login}, token
@@ -146,8 +150,7 @@ def collect(login: str, token: str | None = None) -> dict[str, Any]:
                 )
             )
         except RuntimeError:
-            # An org the token cannot read fully still counts as operated;
-            # its repos simply don't enter the measured corpus.
+            # Repositories the token cannot read do not enter the visible corpus.
             continue
 
     contrib = user["contributionsCollection"]

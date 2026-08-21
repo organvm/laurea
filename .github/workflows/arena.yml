@@ -54,5 +54,5 @@ jobs:
           git config user.email "actions@github.com"
           git add LEADERBOARD.md
           git diff --cached --quiet || { git commit -m "arena: verified @$ENTRANT"; git pull --rebase; git push; }
-          gh issue comment ${{ github.event.issue.number }} --body "Verified from the live public API and entered: see [LEADERBOARD.md](../blob/main/LEADERBOARD.md). Same floors, same citations, same rules as everyone — welcome to the arena, @$ENTRANT."
+          gh issue comment ${{ github.event.issue.number }} --body "Snapshot recorded from the live public API: see [LEADERBOARD.md](../blob/main/LEADERBOARD.md). The table compares bounded activity fields and does not rank engineering quality, @$ENTRANT."
           gh issue close ${{ github.event.issue.number }}

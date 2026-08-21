@@ -1,8 +1,9 @@
 {
+  "schema_version": "laurea.report.v2",
   "login": "4444J99",
-  "generated_at": "2026-08-20T19:00:58.740323Z",
+  "generated_at": "2026-08-21T13:36:17.634675Z",
   "source_repository": "organvm/laurea",
-  "source_sha": "a93d801c82d12589b4103a936724a856c91cf2b1",
+  "source_sha": "7fb9c15ef253bc14459519d090447b653750d46d",
   "snapshot": {
     "login": "4444J99",
     "name": "Anthony James Padavano",
@@ -102,7 +103,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-14T02:16:04Z",
+        "pushedAt": "2026-08-21T02:14:22Z",
         "primaryLanguage": {
           "name": "TypeScript"
         }
@@ -132,7 +133,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-20T07:07:52Z",
+        "pushedAt": "2026-08-21T07:09:16Z",
         "primaryLanguage": null
       },
       {
@@ -306,7 +307,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 2,
-        "pushedAt": "2026-08-12T10:06:52Z",
+        "pushedAt": "2026-08-21T04:15:08Z",
         "primaryLanguage": {
           "name": "JavaScript"
         }
@@ -356,7 +357,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 3,
-        "pushedAt": "2026-08-13T19:46:47Z",
+        "pushedAt": "2026-08-20T19:44:35Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -516,7 +517,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 1,
-        "pushedAt": "2026-08-13T19:58:11Z",
+        "pushedAt": "2026-08-20T19:58:55Z",
         "primaryLanguage": {
           "name": "TypeScript"
         }
@@ -526,7 +527,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 1,
-        "pushedAt": "2026-08-14T06:55:49Z",
+        "pushedAt": "2026-08-21T06:56:02Z",
         "primaryLanguage": {
           "name": "JavaScript"
         }
@@ -556,7 +557,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-14T04:50:01Z",
+        "pushedAt": "2026-08-21T04:54:16Z",
         "primaryLanguage": {
           "name": "TypeScript"
         }
@@ -984,7 +985,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-15T12:48:20Z",
+        "pushedAt": "2026-08-21T12:33:48Z",
         "primaryLanguage": {
           "name": "TypeScript"
         }
@@ -994,7 +995,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-09T02:41:43Z",
+        "pushedAt": "2026-08-21T12:24:08Z",
         "primaryLanguage": {
           "name": "TypeScript"
         }
@@ -1334,7 +1335,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-20T18:17:09Z",
+        "pushedAt": "2026-08-21T12:57:29Z",
         "primaryLanguage": {
           "name": "Astro"
         }
@@ -1472,7 +1473,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 1,
-        "pushedAt": "2026-08-14T00:36:16Z",
+        "pushedAt": "2026-08-21T00:34:10Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -1648,7 +1649,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-17T18:03:54Z",
+        "pushedAt": "2026-08-21T13:12:45Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -1816,7 +1817,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-20T08:26:43Z",
+        "pushedAt": "2026-08-21T12:33:20Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -2840,7 +2841,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-20T18:56:01Z",
+        "pushedAt": "2026-08-21T13:05:46Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -3014,7 +3015,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-20T18:59:58Z",
+        "pushedAt": "2026-08-21T13:14:32Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -3095,94 +3096,84 @@
       }
     ],
     "contributions": {
-      "total": 34379,
-      "commits": 15663,
-      "pull_requests": 4181,
+      "total": 33587,
+      "commits": 15671,
+      "pull_requests": 4191,
       "reviews": 219,
       "issues": 2504,
-      "restricted": 11789
+      "restricted": 10979
     }
   },
   "findings": [
     {
       "axis": "contributions_year",
-      "title": "Contribution volume (12 months)",
-      "value": 34379.0,
-      "unit": "contributions/yr",
-      "tier": "top 0.1%",
-      "evidence": "34,379 contributions in the last 12 months (15,663 commits, 4,181 pull requests) \u2014 about 94 shipped units of work every single day",
-      "source": "GitHub Octoverse 2023 (100M+ accounts, majority dormant per year); public country leaderboards (gayanvoice/top-github-users) where national top-1000 entry sits in the low five figures of yearly contributions",
-      "analysis": "94 shipped units of work per day, every day of the year, weekends included. A typical active developer records a few hundred contributions per year; the top floors here mean this account outpaces at least 999 of every 1,000 active developers. That is not typing speed \u2014 it is an engineer who industrialized his own process."
+      "title": "GitHub contribution activity (12 months)",
+      "value": 33587.0,
+      "unit": "contribution events",
+      "status": "measured",
+      "evidence": "GitHub reports 33,587 contribution-calendar events in the last 12 months. Associated API fields report 15,671 commits, 4,191 pull requests, 219 reviews, and 2,504 issues; these fields are not an additive breakdown",
+      "source": "GitHub GraphQL contributionsCollection and contributionCalendar",
+      "analysis": "This is an activity count, not a count of shipped units. GitHub events vary in scope and do not establish review, merge, quality, or impact."
+    },
+    {
+      "axis": "organization_memberships",
+      "title": "Visible organization memberships",
+      "value": 10.0,
+      "unit": "organizations",
+      "status": "measured",
+      "evidence": "GitHub returned 10 organization memberships for this account",
+      "source": "GitHub GraphQL user.organizations (first 20 visible to the token)",
+      "analysis": "Membership does not by itself establish ownership, administrative authority, or individual responsibility for every repository in an organization."
     },
     {
       "axis": "pull_requests_year",
-      "title": "Integration throughput",
-      "value": 4181.0,
-      "unit": "PRs/yr",
-      "tier": "top 0.1%",
-      "evidence": "4,181 pull requests opened in 12 months \u2014 ~80 reviewed, mergeable units of work every week",
-      "source": "Octoverse pull-request volume statistics; median active developer opens well under 100 PRs/year",
-      "analysis": "~80 reviewed, mergeable units of work every week. Many strong professional engineers open fewer pull requests in a year than this account opens in a month."
+      "title": "Pull requests opened (12 months)",
+      "value": 4191.0,
+      "unit": "pull requests",
+      "status": "measured",
+      "evidence": "GitHub reports 4,191 pull requests opened in the trailing 12-month collection",
+      "source": "GitHub GraphQL contributionsCollection.totalPullRequestContributions",
+      "analysis": "Opened pull requests are activity events; this field does not say whether they were reviewed, mergeable, merged, distinct in scope, or created without automation."
     },
     {
-      "axis": "repos_owned",
-      "title": "Repository portfolio",
+      "axis": "repos_visible",
+      "title": "Visible non-fork repository corpus",
       "value": 290.0,
-      "unit": "owned repos",
-      "tier": "top 0.1%",
-      "evidence": "290 original (non-fork) repositories owned across 10 operated organizations plus the personal account \u2014 an institutional footprint",
-      "source": "GitHub Octoverse account totals vs. repository totals: the median account owns 0\u20132 public repositories; multiple public analyses of the GH Archive corpus put >30 owned repos in the top percentile of accounts",
-      "analysis": "The median GitHub account owns 0\u20132 repositories. 290 is not a large personal portfolio \u2014 it is the footprint of an engineering organization: designed, shipped, and maintained by one person."
+      "unit": "repositories",
+      "status": "measured",
+      "evidence": "290 non-fork repositories were visible across the personal account and 10 organization memberships returned by the API",
+      "source": "GitHub GraphQL repositories connections with isFork=false",
+      "analysis": "Organization repositories can include work by other contributors. Visibility does not establish individual authorship, maintenance, or operation."
     },
     {
       "axis": "language_breadth",
-      "title": "Language breadth",
+      "title": "Primary-language breadth of the visible corpus",
       "value": 17.0,
-      "unit": "primary languages",
-      "tier": "top 1%",
-      "evidence": "17 distinct languages each leading at least one shipped repository \u2014 led by Python (109), TypeScript (50), HTML (24), JavaScript (21), Shell (15)",
-      "source": "Octoverse language reports: the typical developer ships in 1\u20133 languages; polyglot activity beyond 5 primary languages across owned repos is rare in GH Archive analyses",
-      "analysis": "Most developers ship in 1\u20133 languages over a career. 17 languages each leading a shipped repository is the breadth of an entire team compressed into one engineer."
+      "unit": "primary-language labels",
+      "status": "derived",
+      "evidence": "GitHub assigns 17 distinct primary-language labels across the visible non-fork corpus \u2014 led by Python (109), TypeScript (50), HTML (24), JavaScript (21), Shell (15)",
+      "source": "Distinct repository.primaryLanguage.name values in the visible corpus",
+      "analysis": "A repository has one GitHub-assigned primary language. This describes the corpus and does not establish individual proficiency or authorship."
     },
     {
-      "axis": "orgs_operated",
-      "title": "Federation architecture",
-      "value": 10.0,
-      "unit": "organizations",
-      "tier": "top 1%",
-      "evidence": "10 GitHub organizations operated as a single federated system \u2014 separation of concerns applied to an entire estate, not just a codebase",
-      "source": "GitHub organization membership statistics: most accounts belong to 0\u20131 organizations and *operate* none",
-      "analysis": "Most accounts operate zero organizations. 10 is separation-of-concerns applied to a whole estate \u2014 the org chart of a small company, run by its only employee."
-    },
-    {
-      "axis": "full_stack_coverage",
-      "title": "Full-stack coverage",
+      "axis": "language_layer_coverage",
+      "title": "Mapped language-layer coverage",
       "value": 5.0,
-      "unit": "stack layers",
-      "tier": "top 1%",
-      "evidence": "Shipped repositories lead in 5 distinct stack layers: backend, creative, frontend, infra, native \u2014 frontend through infrastructure in one pair of hands",
-      "source": "Layer mapping over primary languages of owned non-fork repos; covering 4+ layers with shipped code is the working definition of full-stack, and polyglot shipping at this breadth is a top-percentile behavior (see language_breadth baseline)",
-      "analysis": "One person covering roles a company staffs separately: frontend, backend, infrastructure, native, and creative coding. 'Full-stack' is usually a resume word; here it is a measured property."
-    },
-    {
-      "axis": "composite_python_full_stack",
-      "title": "Python full-stack output profile \u2014 composite placement",
-      "value": 1.0,
-      "unit": "percentile floor",
-      "tier": "top 1%",
-      "evidence": "Conjunction holds: 34,379 contributions/yr (top-1% floor cleared), 290 owned repos (top-1% floor cleared), Python leads the corpus (109 repos), and shipped code spans 5 stack layers. A conjunction of independent top-1% conditions is at most as common as its rarest member \u2014 the composite top-1% claim is therefore a floor, not an estimate.",
-      "source": "Conjunction over the cited per-axis baselines (see METHODOLOGY.md)",
-      "analysis": "Read it like an underwriter: each leg alone places its holder past the 99th percentile, and holding all four simultaneously is rarer than any single leg. At most 1 engineer in 100 can make this claim; this one re-proves it by machine every morning."
+      "unit": "mapped layers",
+      "status": "derived",
+      "evidence": "The static language map places the visible corpus in 5 layers: backend, creative, frontend, infra, native",
+      "source": "Deterministic primary-language-to-layer mapping in src/laurea/detectors.py",
+      "analysis": "This is a corpus classification, not evidence that one person authored, shipped, or is proficient in every mapped layer."
     },
     {
       "axis": "tenure",
-      "title": "Tenure",
+      "title": "Account age",
       "value": 9.6,
       "unit": "years",
-      "tier": "notable",
-      "evidence": "On GitHub since 2016 \u2014 9.6 years of shipped history",
-      "source": "Account creation date (no percentile claimed for tenure)",
-      "analysis": "A decade of public, timestamped history. The output measured above is a trajectory, not a sprint \u2014 and every year of it is auditable."
+      "status": "derived",
+      "evidence": "The GitHub account was created in 2016 (9.6 years ago)",
+      "source": "GitHub GraphQL user.createdAt",
+      "analysis": "Account age is not equivalent to continuous professional experience or activity."
     }
   ]
 }

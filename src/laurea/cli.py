@@ -10,12 +10,22 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from . import __version__
+from .baselines import STATUS_DERIVED, STATUS_MEASURED
 from .detectors import REGISTRY, run_all
 from .github import collect, resolve_token
 from .models import Finding, Report
 from .arena import build_row, update_leaderboard
 from .render import render_all
 from .verdict import append_entry, collect_verdict, load_history, verdict_card
+
+_REPORT_SCHEMA = "laurea.report.v2"
+_FINDING_STATUSES = {STATUS_MEASURED, STATUS_DERIVED}
+_LEGACY_GENERATED_PATHS = (
+    "SUPERLATIVES.md",
+    "cards/repos_owned.svg",
+    "cards/orgs_operated.svg",
+    "cards/full_stack_coverage.svg",
+)
 
 
 def _compute(login: str, assets: Path) -> Report:
@@ -27,7 +37,7 @@ def _compute(login: str, assets: Path) -> Report:
         generated_at=now.isoformat().replace("+00:00", "Z"),
         snapshot=snapshot,
         findings=run_all(snapshot),
-        source_repository=os.environ.get("GITHUB_REPOSITORY", "organvm/laurea"),
+        source_repository=os.environ.get("GITHUB_REPOSITORY", "unknown"),
         source_sha=os.environ.get("GITHUB_SHA", "unknown"),
     )
     assets.mkdir(parents=True, exist_ok=True)
@@ -40,12 +50,23 @@ def _compute(login: str, assets: Path) -> Report:
 
 def _load(assets: Path) -> Report:
     data = json.loads((assets / "metrics.json").read_text())
+    schema_version = data.get("schema_version")
+    if schema_version != _REPORT_SCHEMA:
+        raise ValueError(
+            f"unsupported metrics schema {schema_version!r}; recompute with the current LAVREA release"
+        )
+    findings = data.get("findings")
+    if not isinstance(findings, list) or any(
+        not isinstance(finding, dict) or finding.get("status") not in _FINDING_STATUSES
+        for finding in findings
+    ):
+        raise ValueError("metrics findings must use measured or derived status values")
     return Report(
         login=data["login"],
         generated_at=data["generated_at"],
         snapshot=data["snapshot"],
-        findings=[Finding(**f) for f in data["findings"]],
-        source_repository=data.get("source_repository", "organvm/laurea"),
+        findings=[Finding(**finding) for finding in findings],
+        source_repository=data.get("source_repository", "unknown"),
         source_sha=data.get("source_sha", "unknown"),
     )
 
@@ -61,6 +82,10 @@ def _render(report: Report, assets: Path) -> list[str]:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)
         written.append(str(path))
+    for relative_path in _LEGACY_GENERATED_PATHS:
+        legacy_path = assets / relative_path
+        if legacy_path.exists():
+            legacy_path.unlink()
     return written
 
 
@@ -99,7 +124,8 @@ def main(argv: list[str] | None = None) -> int:
         report = _compute(args.login, args.assets)
         print(f"computed {len(report.findings)} findings for @{args.login}")
         for f in report.findings:
-            print(f"  [{f.tier:>9}] {f.title}: {f.value:,.0f} {f.unit}")
+            value = f"{int(f.value):,}" if f.value == int(f.value) else f"{f.value:,.1f}"
+            print(f"  [{f.status:>8}] {f.title}: {value} {f.unit}")
     else:
         report = _load(args.assets)
 
