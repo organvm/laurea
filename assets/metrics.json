@@ -1,9 +1,9 @@
 {
   "schema_version": "laurea.report.v2",
   "login": "4444J99",
-  "generated_at": "2026-08-21T13:00:23.485914Z",
+  "generated_at": "2026-08-21T13:13:35.920345Z",
   "source_repository": "organvm/laurea",
-  "source_sha": "d893ffc9f5d96bd23001cb4612ec235014945576",
+  "source_sha": "456e73a2970ec3a68c6a7ee8826ac4f2627ef0dc",
   "snapshot": {
     "login": "4444J99",
     "name": "Anthony James Padavano",
@@ -1649,7 +1649,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-21T12:56:13Z",
+        "pushedAt": "2026-08-21T13:12:45Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -2841,7 +2841,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-21T12:57:13Z",
+        "pushedAt": "2026-08-21T13:05:46Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -3015,7 +3015,7 @@
         "isFork": false,
         "isArchived": false,
         "stargazerCount": 0,
-        "pushedAt": "2026-08-21T12:23:07Z",
+        "pushedAt": "2026-08-21T13:01:04Z",
         "primaryLanguage": {
           "name": "Python"
         }
@@ -3096,9 +3096,9 @@
       }
     ],
     "contributions": {
-      "total": 33586,
+      "total": 33587,
       "commits": 15671,
-      "pull_requests": 4190,
+      "pull_requests": 4191,
       "reviews": 219,
       "issues": 2504,
       "restricted": 10979
@@ -3108,10 +3108,10 @@
     {
       "axis": "contributions_year",
       "title": "GitHub contribution activity (12 months)",
-      "value": 33586.0,
+      "value": 33587.0,
       "unit": "contribution events",
       "status": "measured",
-      "evidence": "GitHub reports 33,586 contribution-calendar events in the last 12 months (15,671 commits, 4,190 pull requests, 219 reviews, and 2,504 issues)",
+      "evidence": "GitHub reports 33,587 contribution-calendar events in the last 12 months. Associated API fields report 15,671 commits, 4,191 pull requests, 219 reviews, and 2,504 issues; these fields are not an additive breakdown",
       "source": "GitHub GraphQL contributionsCollection and contributionCalendar",
       "analysis": "This is an activity count, not a count of shipped units. GitHub events vary in scope and do not establish review, merge, quality, or impact."
     },
@@ -3128,10 +3128,10 @@
     {
       "axis": "pull_requests_year",
       "title": "Pull requests opened (12 months)",
-      "value": 4190.0,
+      "value": 4191.0,
       "unit": "pull requests",
       "status": "measured",
-      "evidence": "GitHub reports 4,190 pull requests opened in the trailing 12-month collection",
+      "evidence": "GitHub reports 4,191 pull requests opened in the trailing 12-month collection",
       "source": "GitHub GraphQL contributionsCollection.totalPullRequestContributions",
       "analysis": "Opened pull requests are activity events; this field does not say whether they were reviewed, mergeable, merged, distinct in scope, or created without automation."
     },
@@ -3144,16 +3144,6 @@
       "evidence": "290 non-fork repositories were visible across the personal account and 10 organization memberships returned by the API",
       "source": "GitHub GraphQL repositories connections with isFork=false",
       "analysis": "Organization repositories can include work by other contributors. Visibility does not establish individual authorship, maintenance, or operation."
-    },
-    {
-      "axis": "tenure",
-      "title": "Account age",
-      "value": 9.6,
-      "unit": "years",
-      "status": "measured",
-      "evidence": "The GitHub account was created in 2016 (9.6 years ago)",
-      "source": "GitHub GraphQL user.createdAt",
-      "analysis": "Account age is not equivalent to continuous professional experience or activity."
     },
     {
       "axis": "language_breadth",
@@ -3174,6 +3164,16 @@
       "evidence": "The static language map places the visible corpus in 5 layers: backend, creative, frontend, infra, native",
       "source": "Deterministic primary-language-to-layer mapping in src/laurea/detectors.py",
       "analysis": "This is a corpus classification, not evidence that one person authored, shipped, or is proficient in every mapped layer."
+    },
+    {
+      "axis": "tenure",
+      "title": "Account age",
+      "value": 9.6,
+      "unit": "years",
+      "status": "derived",
+      "evidence": "The GitHub account was created in 2016 (9.6 years ago)",
+      "source": "GitHub GraphQL user.createdAt",
+      "analysis": "Account age is not equivalent to continuous professional experience or activity."
     }
   ]
 }

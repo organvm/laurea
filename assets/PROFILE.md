@@ -1,12 +1,12 @@
 # MEASURED PROFILE
 
-*Generated 2026-08-21T13:00:23.485914Z for [@4444J99](https://github.com/4444J99). Counts come from the GitHub API; derived observations name their transformation. No percentile ranking is published because this repository does not carry a validated population distribution.*
+*Generated 2026-08-21T13:13:35.920345Z for [@4444J99](https://github.com/4444J99). Counts come from the GitHub API; derived observations name their transformation. No percentile ranking is published because this repository does not carry a validated population distribution.*
 
 ## GitHub contribution activity (12 months) — **measured**
 
-**Observed:** 33,586 contribution events
+**Observed:** 33,587 contribution events
 
-GitHub reports 33,586 contribution-calendar events in the last 12 months (15,671 commits, 4,190 pull requests, 219 reviews, and 2,504 issues).
+GitHub reports 33,587 contribution-calendar events in the last 12 months. Associated API fields report 15,671 commits, 4,191 pull requests, 219 reviews, and 2,504 issues; these fields are not an additive breakdown.
 
 **Definition:** GitHub GraphQL contributionsCollection and contributionCalendar.
 
@@ -24,9 +24,9 @@ GitHub returned 10 organization memberships for this account.
 
 ## Pull requests opened (12 months) — **measured**
 
-**Observed:** 4,190 pull requests
+**Observed:** 4,191 pull requests
 
-GitHub reports 4,190 pull requests opened in the trailing 12-month collection.
+GitHub reports 4,191 pull requests opened in the trailing 12-month collection.
 
 **Definition:** GitHub GraphQL contributionsCollection.totalPullRequestContributions.
 
@@ -41,16 +41,6 @@ GitHub reports 4,190 pull requests opened in the trailing 12-month collection.
 **Definition:** GitHub GraphQL repositories connections with isFork=false.
 
 **Boundary:** Organization repositories can include work by other contributors. Visibility does not establish individual authorship, maintenance, or operation.
-
-## Account age — **measured**
-
-**Observed:** 10 years
-
-The GitHub account was created in 2016 (9.6 years ago).
-
-**Definition:** GitHub GraphQL user.createdAt.
-
-**Boundary:** Account age is not equivalent to continuous professional experience or activity.
 
 ## Primary-language breadth of the visible corpus — **derived**
 
@@ -71,6 +61,16 @@ The static language map places the visible corpus in 5 layers: backend, creative
 **Definition:** Deterministic primary-language-to-layer mapping in src/laurea/detectors.py.
 
 **Boundary:** This is a corpus classification, not evidence that one person authored, shipped, or is proficient in every mapped layer.
+
+## Account age — **derived**
+
+**Observed:** 9.6 years
+
+The GitHub account was created in 2016 (9.6 years ago).
+
+**Definition:** GitHub GraphQL user.createdAt.
+
+**Boundary:** Account age is not equivalent to continuous professional experience or activity.
 
 ## What these numbers do not establish
 

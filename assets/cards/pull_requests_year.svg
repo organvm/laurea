@@ -18,7 +18,7 @@
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">Pull requests opened (12 months)</text>
   <text class="status fade d1" x="396" y="34" text-anchor="end" fill="#e3b341">MEASURED</text>
-  <text class="big fade d1" x="24" y="76">4,190</text>
+  <text class="big fade d1" x="24" y="76">4,191</text>
   <text class="ev fade d2" x="135" y="76">pull requests</text>
-  <text class="ev fade d2" x="24" y="104">GitHub reports 4,190 pull requests opened in the trailing</text><text class="ev fade d3" x="24" y="120">12-month collection</text>
+  <text class="ev fade d2" x="24" y="104">GitHub reports 4,191 pull requests opened in the trailing</text><text class="ev fade d3" x="24" y="120">12-month collection</text>
 </svg>

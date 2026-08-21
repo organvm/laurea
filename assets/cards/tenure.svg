@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="170" viewBox="0 0 420 170" role="img" aria-label="Account age: measured">
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="170" viewBox="0 0 420 170" role="img" aria-label="Account age: derived">
   <style>
     .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
     .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
@@ -17,7 +17,7 @@
 </defs>
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">Account age</text>
-  <text class="status fade d1" x="396" y="34" text-anchor="end" fill="#e3b341">MEASURED</text>
+  <text class="status fade d1" x="396" y="34" text-anchor="end" fill="#8b949e">DERIVED</text>
   <text class="big fade d1" x="24" y="76">9.6</text>
   <text class="ev fade d2" x="93" y="76">years</text>
   <text class="ev fade d2" x="24" y="104">The GitHub account was created in 2016 (9.6 years ago)</text>

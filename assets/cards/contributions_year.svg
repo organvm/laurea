@@ -18,7 +18,7 @@
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
   <text class="t fade" x="24" y="34">GitHub contribution activity (12 months)</text>
   <text class="status fade d1" x="396" y="34" text-anchor="end" fill="#e3b341">MEASURED</text>
-  <text class="big fade d1" x="24" y="76">33,586</text>
+  <text class="big fade d1" x="24" y="76">33,587</text>
   <text class="ev fade d2" x="156" y="76">contribution events</text>
-  <text class="ev fade d2" x="24" y="104">GitHub reports 33,586 contribution-calendar events in the</text><text class="ev fade d3" x="24" y="120">last 12 months (15,671 commits, 4,190 pull requests, 219</text><text class="ev fade d4" x="24" y="136">reviews, and 2,504 issues)</text>
+  <text class="ev fade d2" x="24" y="104">GitHub reports 33,587 contribution-calendar events in the</text><text class="ev fade d3" x="24" y="120">last 12 months. Associated API fields report 15,671</text><text class="ev fade d4" x="24" y="136">commits, 4,191 pull requests, 219 reviews, and 2,504 …</text>
 </svg>

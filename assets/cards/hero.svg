@@ -29,7 +29,7 @@
   <text class="ev fade d1" text-anchor="middle" x="400" y="119"><tspan x="400" dy="0">GitHub activity does not establish authorship, quality, reliability, adoption, or</tspan><tspan x="400" dy="15">impact.</tspan></text>
   
   <g class="fade d1" transform="translate(70, 160)">
-    <text class="big" text-anchor="middle" x="60">33,586</text>
+    <text class="big" text-anchor="middle" x="60">33,587</text>
     <text class="ev" text-anchor="middle" x="60" y="24"><tspan x="60" dy="0">contribution events</tspan><tspan x="60" dy="14">trailing 12 months</tspan></text>
   </g>
   <g class="fade d2" transform="translate(250, 160)">
@@ -37,7 +37,7 @@
     <text class="ev" text-anchor="middle" x="60" y="24"><tspan x="60" dy="0">non-fork repositories</tspan><tspan x="60" dy="14">visible corpus</tspan></text>
   </g>
   <g class="fade d3" transform="translate(430, 160)">
-    <text class="big" text-anchor="middle" x="60">4,190</text>
+    <text class="big" text-anchor="middle" x="60">4,191</text>
     <text class="ev" text-anchor="middle" x="60" y="24"><tspan x="60" dy="0">pull requests opened</tspan><tspan x="60" dy="14">trailing 12 months</tspan></text>
   </g>
   <g class="fade d4" transform="translate(610, 160)">
