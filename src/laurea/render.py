@@ -1,30 +1,23 @@
-"""Animated SVG laurels + the generated SUPERLATIVES report.
-
-Pure string templating over stdlib — the SVGs embed SMIL/CSS animation
-(gradient shimmer, staged fade-in), which GitHub's image proxy renders
-inside READMEs. Every card carries its evidence line so a claim never
-travels without its receipt.
-"""
+"""Animated SVG cards and the generated bounded activity report."""
 
 from __future__ import annotations
 
 from xml.sax.saxutils import escape
 
-from .baselines import POPULATIONS, TIER_TOP_01, TIER_TOP_1, TIER_TOP_5, cohort_for, odds_for
+from .baselines import STATUS_DERIVED, STATUS_MEASURED
+from .models import Finding, Report
 
-# The instrument's negative space, rendered on every report. A measurement
-# that hides what it cannot see stops being an instrument.
 NOT_MEASURED = (
+    "individual authorship or responsibility for organization repositories",
     "code quality, correctness, maintainability, or security",
+    "whether pull requests were reviewed, mergeable, or merged",
     "system reliability in production",
-    "product adoption, user satisfaction, or business impact "
-    "(the verdict meter records adoption signals separately)",
-    "engineering judgment under uncertainty",
+    "product adoption, user satisfaction, or business impact",
+    "professional experience or engineering judgment",
 )
 PUBLIC_LIMITATION = (
-    "GitHub activity does not establish quality, reliability, adoption, or business impact."
+    "GitHub activity does not establish authorship, quality, reliability, adoption, or impact."
 )
-from .models import Finding, Report
 
 GOLD = "#e3b341"
 GOLD_DIM = "#9e7b2a"
@@ -34,17 +27,13 @@ BORDER = "#30363d"
 FG = "#e6edf3"
 MUTED = "#8b949e"
 
-_TIER_COLOR = {
-    TIER_TOP_01: "#ffd700",
-    TIER_TOP_1: GOLD,
-    TIER_TOP_5: "#c9a227",
-}
+_STATUS_COLOR = {STATUS_MEASURED: GOLD, STATUS_DERIVED: MUTED}
 
 _STYLE = f"""
   <style>
     .t {{ font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {FG}; }}
     .big {{ font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {GOLD}; }}
-    .tier {{ font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }}
+    .status {{ font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }}
     .ev {{ font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {MUTED}; }}
     .fade {{ opacity: 0; animation: fadein 0.9s ease-out forwards; }}
     .d1 {{ animation-delay: 0.15s; }} .d2 {{ animation-delay: 0.3s; }}
@@ -55,7 +44,7 @@ _STYLE = f"""
 
 
 def _shimmer(uid: str) -> str:
-    """A slowly sweeping gold gradient — the living-laurel effect."""
+    """Return the shared slow gold gradient."""
     return f"""
   <linearGradient id="sh{uid}" x1="0%" y1="0%" x2="100%" y2="0%">
     <stop offset="0%" stop-color="{GOLD_DIM}"/>
@@ -68,172 +57,141 @@ def _shimmer(uid: str) -> str:
 
 
 def _laurel(x: int, y: int, scale: float = 1.0) -> str:
-    """Two mirrored laurel branches drawn as arced fronds."""
+    """Return two mirrored decorative laurel branches."""
     fronds = "".join(
-        f'<ellipse cx="0" cy="{-8 - i * 7}" rx="6" ry="2.6" '
-        f'transform="rotate({-24 - i * 5} 0 {-8 - i * 7})" fill="url(#shL)"/>'
-        for i in range(5)
+        f'<ellipse cx="0" cy="{-8 - index * 7}" rx="6" ry="2.6" '
+        f'transform="rotate({-24 - index * 5} 0 {-8 - index * 7})" fill="url(#shL)"/>'
+        for index in range(5)
     )
     branch = f'<path d="M0,4 Q-3,-18 2,-42" stroke="url(#shL)" stroke-width="2" fill="none"/>{fronds}'
     return (
         f'<g transform="translate({x},{y}) scale({scale})">'
         f'<g transform="translate(-16,0)">{branch}</g>'
         f'<g transform="translate(16,0) scale(-1,1)">{branch}</g>'
-        f"</g>"
+        "</g>"
     )
 
 
 def _fmt(value: float) -> str:
-    if value == int(value):
-        return f"{int(value):,}"
-    return f"{value:,.1f}"
+    return f"{int(value):,}" if value == int(value) else f"{value:,.1f}"
 
 
 def _wrap(text: str, width: int) -> list[str]:
-    words, lines, line = text.split(), [], ""
-    for w in words:
-        if len(line) + len(w) + 1 > width:
+    lines: list[str] = []
+    line = ""
+    for word in text.split():
+        candidate = f"{line} {word}".strip()
+        if line and len(candidate) > width:
             lines.append(line)
-            line = w
+            line = word
         else:
-            line = f"{line} {w}".strip()
+            line = candidate
     if line:
         lines.append(line)
     return lines
 
 
+def _tspans(lines: list[str], x: int, line_height: int = 14) -> str:
+    return "".join(
+        f'<tspan x="{x}" dy="{0 if index == 0 else line_height}">{escape(line)}</tspan>'
+        for index, line in enumerate(lines)
+    )
+
+
 def hero_card(report: Report) -> str:
-    composite = report.by_axis("composite_python_full_stack")
-    headline = (
-        f"{composite.tier.title()} GitHub output profile"
-        if composite
-        else "GITHUB OUTPUT PROFILE — MEASURED"
-    )
-    subline = (
-        "scale, breadth, and operational complexity measured from GitHub activity"
-        if composite
-        else "measured from the GitHub API"
-    )
-    c = report.snapshot["contributions"]
-    repos = len([r for r in report.snapshot["repos"] if not r["isFork"]])
+    """Render a generic profile card without population-ranking claims."""
+    contributions = report.snapshot["contributions"]
+    repositories = len([repo for repo in report.snapshot["repos"] if repo["isFork"] is False])
     stats = (
-        (f"{c['total']:,}", "GitHub contributions · trailing 12 months"),
-        (f"{repos:,}", "non-fork repositories visible to this run"),
-        (f"{c['pull_requests']:,}", "pull requests opened · trailing 12 months"),
-        (f"{len(report.snapshot['orgs'])}", "organizations queried"),
+        (f"{contributions['total']:,}", ["contribution events", "trailing 12 months"]),
+        (f"{repositories:,}", ["non-fork repositories", "visible corpus"]),
+        (f"{contributions['pull_requests']:,}", ["pull requests opened", "trailing 12 months"]),
+        (f"{len(report.snapshot['orgs'])}", ["organization memberships", "queried"]),
     )
-    cols = "".join(
+    columns = "".join(
         f"""
-  <g class="fade d{i + 1}" transform="translate({70 + i * 180}, 150)">
-    <text class="big" text-anchor="middle" x="60">{escape(v)}</text>
-    <text class="ev" text-anchor="middle" x="60" y="24">{escape(label)}</text>
+  <g class="fade d{index + 1}" transform="translate({70 + index * 180}, 160)">
+    <text class="big" text-anchor="middle" x="60">{escape(value)}</text>
+    <text class="ev" text-anchor="middle" x="60" y="24">{_tspans(labels, 60)}</text>
   </g>"""
-        for i, (v, label) in enumerate(stats)
+        for index, (value, labels) in enumerate(stats)
     )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="800" height="240" viewBox="0 0 800 240" role="img" aria-label="{escape(headline)}">
+    limitation = _tspans(_wrap(PUBLIC_LIMITATION, 86), 400, 15)
+    source = report.source_repository if report.source_repository != "unknown" else "source repository unavailable"
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="800" height="270" viewBox="0 0 800 270" role="img" aria-label="Measured GitHub activity profile">
   {_STYLE}
   <defs>{_shimmer("H")}{_shimmer("L")}</defs>
-  <rect width="799" height="239" x="0.5" y="0.5" rx="12" fill="{BG}" stroke="{BORDER}"/>
-  {_laurel(400, 78, 1.1)}
-  <text class="tier fade" fill="url(#shH)" text-anchor="middle" x="400" y="96" style="font-size:20px">{escape(headline)}</text>
-  <text class="ev fade d1" text-anchor="middle" x="400" y="118">{escape(subline)} · {escape(PUBLIC_LIMITATION)}</text>
-  {cols}
-  <text class="ev fade d4" text-anchor="middle" x="400" y="222">LAVREA · the laurels are computed · github.com/{escape(report.login)}/laurea</text>
+  <rect width="799" height="269" x="0.5" y="0.5" rx="12" fill="{BG}" stroke="{BORDER}"/>
+  {_laurel(400, 76, 1.1)}
+  <text class="status fade" fill="url(#shH)" text-anchor="middle" x="400" y="96" style="font-size:20px">MEASURED GITHUB ACTIVITY PROFILE</text>
+  <text class="ev fade d1" text-anchor="middle" x="400" y="119">{limitation}</text>
+  {columns}
+  <text class="ev fade d4" text-anchor="middle" x="400" y="252">LAVREA · generated for @{escape(report.login)} · {escape(source)}</text>
 </svg>
 """
 
 
 def axis_card(finding: Finding) -> str:
-    color = _TIER_COLOR.get(finding.tier, MUTED)
-    ev_lines = _wrap(finding.evidence, 58)[:3]
-    ev = "".join(
-        f'<text class="ev fade d{i + 2}" x="24" y="{104 + i * 16}">{escape(line)}</text>'
-        for i, line in enumerate(ev_lines)
+    """Render one measured or derived observation with bounded copy."""
+    color = _STATUS_COLOR[finding.status]
+    evidence_lines = _wrap(finding.evidence, 58)[:3]
+    evidence = "".join(
+        f'<text class="ev fade d{index + 2}" x="24" y="{104 + index * 16}">{escape(line)}</text>'
+        for index, line in enumerate(evidence_lines)
     )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="420" height="170" viewBox="0 0 420 170" role="img" aria-label="{escape(finding.title)}: {escape(finding.tier)}">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="420" height="170" viewBox="0 0 420 170" role="img" aria-label="{escape(finding.title)}: {escape(finding.status)}">
   {_STYLE}
   <defs>{_shimmer("L")}</defs>
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="{PANEL}" stroke="{BORDER}"/>
   <text class="t fade" x="24" y="34">{escape(finding.title)}</text>
-  <text class="tier fade d1" x="396" y="34" text-anchor="end" fill="{color}">{escape(finding.tier.upper())}</text>
-  {f'<text class="ev fade d2" x="396" y="50" text-anchor="end">{escape(odds)}</text>' if (odds := odds_for(finding.tier)) else ""}
+  <text class="status fade d1" x="396" y="34" text-anchor="end" fill="{color}">{escape(finding.status.upper())}</text>
   <text class="big fade d1" x="24" y="76">{escape(_fmt(finding.value))}</text>
   <text class="ev fade d2" x="{30 + 21 * len(_fmt(finding.value))}" y="76">{escape(finding.unit)}</text>
-  {ev}
+  {evidence}
 </svg>
 """
 
 
-def superlatives_md(report: Report) -> str:
+def profile_md(report: Report) -> str:
+    """Render the full bounded report without heuristic rankings."""
     lines = [
-        "# SUPERLATIVES",
+        "# MEASURED PROFILE",
         "",
-        f"*Generated {report.generated_at} for "
-        f"[@{report.login}](https://github.com/{report.login}). "
-        "Every claim below is recomputed from the live GitHub API; "
-        "every percentile is a conservative floor with a cited baseline "
-        "(see [METHODOLOGY.md](METHODOLOGY.md)).*",
+        f"*Generated {report.generated_at} for [@{report.login}](https://github.com/{report.login}). "
+        "Counts come from the GitHub API; derived observations name their transformation. "
+        "No percentile ranking is published because this repository does not carry a validated "
+        "population distribution.*",
         "",
     ]
-    for f in report.findings:
-        odds = odds_for(f.tier)
-        heading = f"## {f.title} — **{f.tier}**" + (f" *({odds})*" if odds else "")
+    for finding in report.findings:
+        evidence = finding.evidence.rstrip(".")
         lines += [
-            heading,
+            f"## {finding.title} — **{finding.status}**",
             "",
-            f"**Measured:** {f.value:,.0f} {f.unit}",
+            f"**Observed:** {finding.value:,.0f} {finding.unit}",
             "",
-            f"{f.evidence}.",
+            f"{evidence}.",
+            "",
+            f"**Definition:** {finding.source}.",
+            "",
+            f"**Boundary:** {finding.analysis}",
             "",
         ]
-        if f.analysis:
-            lines += [f"**What this means:** {f.analysis}", ""]
-        if (cohort := cohort_for(f.tier)) is not None:
-            n, anchor = cohort
-            lines += [
-                f"**Out of how many people:** the {f.tier} floor, taken against "
-                f"≈30M annually active developers, is a worldwide cohort of at "
-                f"most ~{n:,} people — {anchor}.",
-                "",
-            ]
-        lines += [f"*Baseline: {f.source}.*", ""]
-    lines += ["## The denominators — who the percentages are out of", ""]
-    for _key, (size, desc) in POPULATIONS.items():
-        lines += [f"- **≈{size:,}** — {desc}.", ""]
-    lines += [
-        "Cohorts above use the harder class (annually active developers): "
-        "top 1% of 30M is at most ~300,000 people worldwide; top 0.1% is at "
-        "most ~30,000 — fewer people than fill one large stadium, across the "
-        "entire planet's developer population. Substitute your own denominator; "
-        "the multiplication is the whole method.",
-        "",
-    ]
     lines += [
         "## What these numbers do not establish",
         "",
-        "This instrument measures an *output profile* — scale, breadth, and "
-        "operational complexity of shipped work. It deliberately does not measure:",
+        "LAVREA reports an API-visible activity and repository corpus. It does not establish:",
         "",
     ]
     lines += [f"- {item}" for item in NOT_MEASURED]
-    lines += [
-        "",
-        "Those require different evidence (code review, testing, production "
-        "performance, real-world outcomes) — tracked as the quality-signal "
-        "detector roadmap in the repo's issues, never inferred from volume.",
-        "",
-        PUBLIC_LIMITATION,
-        "",
-    ]
+    lines += ["", PUBLIC_LIMITATION, ""]
     return "\n".join(lines)
 
 
 def render_all(report: Report) -> dict[str, str]:
-    """Returns {relative_path: content} for everything to write to assets/."""
-    out = {"cards/hero.svg": hero_card(report)}
-    for f in report.findings:
-        if f.axis == "composite_python_full_stack":
-            continue  # the hero card carries the composite
-        out[f"cards/{f.axis}.svg"] = axis_card(f)
-    out["SUPERLATIVES.md"] = superlatives_md(report)
-    return out
+    """Return every generated relative path and its content."""
+    output = {"cards/hero.svg": hero_card(report)}
+    for finding in report.findings:
+        output[f"cards/{finding.axis}.svg"] = axis_card(finding)
+    output["PROFILE.md"] = profile_md(report)
+    return output

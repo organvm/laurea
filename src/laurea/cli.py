@@ -27,7 +27,7 @@ def _compute(login: str, assets: Path) -> Report:
         generated_at=now.isoformat().replace("+00:00", "Z"),
         snapshot=snapshot,
         findings=run_all(snapshot),
-        source_repository=os.environ.get("GITHUB_REPOSITORY", "organvm/laurea"),
+        source_repository=os.environ.get("GITHUB_REPOSITORY", "unknown"),
         source_sha=os.environ.get("GITHUB_SHA", "unknown"),
     )
     assets.mkdir(parents=True, exist_ok=True)
@@ -45,7 +45,7 @@ def _load(assets: Path) -> Report:
         generated_at=data["generated_at"],
         snapshot=data["snapshot"],
         findings=[Finding(**f) for f in data["findings"]],
-        source_repository=data.get("source_repository", "organvm/laurea"),
+        source_repository=data.get("source_repository", "unknown"),
         source_sha=data.get("source_sha", "unknown"),
     )
 
@@ -61,6 +61,9 @@ def _render(report: Report, assets: Path) -> list[str]:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)
         written.append(str(path))
+    legacy_report = assets / "SUPERLATIVES.md"
+    if legacy_report.exists():
+        legacy_report.unlink()
     return written
 
 
@@ -99,7 +102,7 @@ def main(argv: list[str] | None = None) -> int:
         report = _compute(args.login, args.assets)
         print(f"computed {len(report.findings)} findings for @{args.login}")
         for f in report.findings:
-            print(f"  [{f.tier:>9}] {f.title}: {f.value:,.0f} {f.unit}")
+            print(f"  [{f.status:>8}] {f.title}: {f.value:,.0f} {f.unit}")
     else:
         report = _load(args.assets)
 

@@ -27,10 +27,10 @@ jobs:
           # the default token still measures the full public estate.
           LAUREA_TOKEN: ${{ secrets.LAUREA_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # This repository is the evidence source for Anthony Padavano's public
-        # profile. Keep the measured subject explicit so an org transfer or
-        # workflow context change cannot silently measure a different account.
-        run: laurea run --login "4444J99"
+          # The canonical repository tracks Anthony. A template-generated copy
+          # or fork tracks its own owner instead of publishing Anthony's data.
+          LAUREA_LOGIN: ${{ github.repository == 'organvm/laurea' && '4444J99' || github.repository_owner }}
+        run: laurea run --login "$LAUREA_LOGIN"
       - name: Commit refreshed assets
         run: |
           git config user.name "laurea[bot]"

@@ -1,19 +1,11 @@
-"""The detector registry — each detector measures one axis of output.
-
-Add a detector = add one function decorated with ``@detector``. Every
-detector receives the snapshot and returns a Finding (or None when the
-axis does not apply). The composite detector at the bottom renders the
-headline claim only when every constituent axis independently clears
-its floor — a conjunction of top-1% conditions is at most as common as
-its rarest member, so the composite tier is itself a floor.
-"""
+"""The detector registry — bounded observations over one API snapshot."""
 
 from __future__ import annotations
 
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from .baselines import BASELINES, TIER_TOP_1, TIER_NOTABLE, tier_rank
+from .baselines import STATUS_DERIVED, STATUS_MEASURED, status_rank
 from .models import Finding
 
 Snapshot = dict[str, Any]
@@ -21,7 +13,8 @@ Detector = Callable[[Snapshot], Finding | None]
 
 REGISTRY: list[Detector] = []
 
-# Language → stack layer. Only languages that lead a shipped repo count.
+# This table classifies GitHub's one primary-language label per repository.
+# It describes the visible corpus; it does not prove individual proficiency.
 _LAYERS: dict[str, str] = {
     "JavaScript": "frontend",
     "TypeScript": "frontend",
@@ -45,171 +38,169 @@ _LAYERS: dict[str, str] = {
 
 
 def detector(fn: Detector) -> Detector:
+    """Register one deterministic observation function."""
     REGISTRY.append(fn)
     return fn
 
 
+def _validate_snapshot(snapshot: Snapshot) -> None:
+    repos = snapshot.get("repos")
+    if not isinstance(repos, list) or any(
+        not isinstance(repo, dict) or not isinstance(repo.get("isFork"), bool)
+        for repo in repos
+    ):
+        raise ValueError("snapshot.repos must contain complete isFork booleans")
+    orgs = snapshot.get("orgs")
+    if not isinstance(orgs, list) or any(not isinstance(org, str) for org in orgs):
+        raise ValueError("snapshot.orgs must be a list of organization logins")
+    contributions = snapshot.get("contributions")
+    required = ("total", "commits", "pull_requests", "reviews", "issues", "restricted")
+    if not isinstance(contributions, dict) or any(
+        not isinstance(contributions.get(key), int) or contributions[key] < 0
+        for key in required
+    ):
+        raise ValueError("snapshot.contributions contains incomplete counts")
+
+
 def _active_repos(snapshot: Snapshot) -> list[dict[str, Any]]:
-    return [r for r in snapshot["repos"] if not r["isFork"]]
+    return [repo for repo in snapshot["repos"] if repo["isFork"] is False]
 
 
 def _langs(snapshot: Snapshot) -> dict[str, int]:
     counts: dict[str, int] = {}
     for repo in _active_repos(snapshot):
-        lang = (repo.get("primaryLanguage") or {}).get("name") if repo.get("primaryLanguage") else None
-        if lang:
-            counts[lang] = counts.get(lang, 0) + 1
+        primary = repo.get("primaryLanguage")
+        language = primary.get("name") if isinstance(primary, dict) else None
+        if isinstance(language, str) and language:
+            counts[language] = counts.get(language, 0) + 1
     return counts
 
 
 @detector
 def contributions_year(snapshot: Snapshot) -> Finding:
-    total = snapshot["contributions"]["total"]
-    base = BASELINES["contributions_year"]
+    contributions = snapshot["contributions"]
+    total = contributions["total"]
     return Finding(
-        axis=base.axis,
-        title="Contribution volume (12 months)",
+        axis="contributions_year",
+        title="GitHub contribution activity (12 months)",
         value=float(total),
-        unit="contributions/yr",
-        tier=base.tier_for(total),
+        unit="contribution events",
+        status=STATUS_MEASURED,
         evidence=(
-            f"{total:,} contributions in the last 12 months "
-            f"({snapshot['contributions']['commits']:,} commits, "
-            f"{snapshot['contributions']['pull_requests']:,} pull requests) — "
-            f"about {total // 365} shipped units of work every single day"
+            f"GitHub reports {total:,} contribution-calendar events in the last 12 months "
+            f"({contributions['commits']:,} commits, "
+            f"{contributions['pull_requests']:,} pull requests, "
+            f"{contributions['reviews']:,} reviews, and "
+            f"{contributions['issues']:,} issues)"
         ),
-        source=base.source,
+        source="GitHub GraphQL contributionsCollection and contributionCalendar",
         analysis=(
-            f"{total // 365} shipped units of work per day, every day of the year, "
-            "weekends included. A typical active developer records a few hundred "
-            "contributions per year; the top floors here mean this account outpaces "
-            "at least 999 of every 1,000 active developers. That is not typing "
-            "speed — it is an engineer who industrialized his own process."
+            "This is an activity count, not a count of shipped units. GitHub events "
+            "vary in scope and do not establish review, merge, quality, or impact."
         ),
     )
 
 
 @detector
-def repos_owned(snapshot: Snapshot) -> Finding:
+def repos_visible(snapshot: Snapshot) -> Finding:
     count = len(_active_repos(snapshot))
-    base = BASELINES["repos_owned"]
     return Finding(
-        axis=base.axis,
-        title="Repository portfolio",
+        axis="repos_visible",
+        title="Visible non-fork repository corpus",
         value=float(count),
-        unit="owned repos",
-        tier=base.tier_for(count),
+        unit="repositories",
+        status=STATUS_MEASURED,
         evidence=(
-            f"{count:,} original (non-fork) repositories owned across "
-            f"{len(snapshot['orgs'])} operated organizations plus the "
-            "personal account — an institutional footprint"
+            f"{count:,} non-fork repositories were visible across the personal account "
+            f"and {len(snapshot['orgs'])} organization memberships returned by the API"
         ),
-        source=base.source,
+        source="GitHub GraphQL repositories connections with isFork=false",
         analysis=(
-            f"The median GitHub account owns 0–2 repositories. {count:,} is not a "
-            "large personal portfolio — it is the footprint of an engineering "
-            "organization: designed, shipped, and maintained by one person."
+            "Organization repositories can include work by other contributors. "
+            "Visibility does not establish individual authorship, maintenance, or operation."
         ),
     )
 
 
 @detector
 def language_breadth(snapshot: Snapshot) -> Finding:
-    langs = _langs(snapshot)
-    base = BASELINES["language_breadth"]
-    top = sorted(langs.items(), key=lambda kv: -kv[1])[:5]
-    leaders = ", ".join(f"{name} ({n})" for name, n in top)
+    languages = _langs(snapshot)
+    leaders = ", ".join(
+        f"{name} ({count})" for name, count in sorted(languages.items(), key=lambda item: -item[1])[:5]
+    )
     return Finding(
-        axis=base.axis,
-        title="Language breadth",
-        value=float(len(langs)),
-        unit="primary languages",
-        tier=base.tier_for(len(langs)),
+        axis="language_breadth",
+        title="Primary-language breadth of the visible corpus",
+        value=float(len(languages)),
+        unit="primary-language labels",
+        status=STATUS_DERIVED,
         evidence=(
-            f"{len(langs)} distinct languages each leading at least one "
-            f"shipped repository — led by {leaders}"
+            f"GitHub assigns {len(languages)} distinct primary-language labels across "
+            f"the visible non-fork corpus" + (f" — led by {leaders}" if leaders else "")
         ),
-        source=base.source,
+        source="Distinct repository.primaryLanguage.name values in the visible corpus",
         analysis=(
-            f"Most developers ship in 1–3 languages over a career. {len(langs)} "
-            "languages each leading a shipped repository is the breadth of an "
-            "entire team compressed into one engineer."
+            "A repository has one GitHub-assigned primary language. This describes "
+            "the corpus and does not establish individual proficiency or authorship."
         ),
     )
 
 
 @detector
 def pull_requests_year(snapshot: Snapshot) -> Finding:
-    prs = snapshot["contributions"]["pull_requests"]
-    base = BASELINES["pull_requests_year"]
+    pull_requests = snapshot["contributions"]["pull_requests"]
     return Finding(
-        axis=base.axis,
-        title="Integration throughput",
-        value=float(prs),
-        unit="PRs/yr",
-        tier=base.tier_for(prs),
+        axis="pull_requests_year",
+        title="Pull requests opened (12 months)",
+        value=float(pull_requests),
+        unit="pull requests",
+        status=STATUS_MEASURED,
         evidence=(
-            f"{prs:,} pull requests opened in 12 months — "
-            f"~{prs // 52} reviewed, mergeable units of work every week"
+            f"GitHub reports {pull_requests:,} pull requests opened in the trailing 12-month collection"
         ),
-        source=base.source,
+        source="GitHub GraphQL contributionsCollection.totalPullRequestContributions",
         analysis=(
-            f"~{prs // 52} reviewed, mergeable units of work every week. Many "
-            "strong professional engineers open fewer pull requests in a year "
-            "than this account opens in a month."
+            "Opened pull requests are activity events; this field does not say whether "
+            "they were reviewed, mergeable, merged, distinct in scope, or created without automation."
         ),
     )
 
 
 @detector
-def orgs_operated(snapshot: Snapshot) -> Finding:
+def organization_memberships(snapshot: Snapshot) -> Finding:
     count = len(snapshot["orgs"])
-    base = BASELINES["orgs_operated"]
     return Finding(
-        axis=base.axis,
-        title="Federation architecture",
+        axis="organization_memberships",
+        title="Visible organization memberships",
         value=float(count),
         unit="organizations",
-        tier=base.tier_for(count),
-        evidence=(
-            f"{count} GitHub organizations operated as a single federated "
-            "system — separation of concerns applied to an entire estate, "
-            "not just a codebase"
-        ),
-        source=base.source,
+        status=STATUS_MEASURED,
+        evidence=f"GitHub returned {count} organization memberships for this account",
+        source="GitHub GraphQL user.organizations (first 20 visible to the token)",
         analysis=(
-            f"Most accounts operate zero organizations. {count} is "
-            "separation-of-concerns applied to a whole estate — the org chart "
-            "of a small company, run by its only employee."
+            "Membership does not by itself establish ownership, administrative authority, "
+            "or individual responsibility for every repository in an organization."
         ),
     )
 
 
 @detector
-def full_stack_coverage(snapshot: Snapshot) -> Finding:
-    langs = _langs(snapshot)
-    layers = sorted({_LAYERS[lang] for lang in langs if lang in _LAYERS})
+def language_layer_coverage(snapshot: Snapshot) -> Finding:
+    layers = sorted({_LAYERS[language] for language in _langs(snapshot) if language in _LAYERS})
     return Finding(
-        axis="full_stack_coverage",
-        title="Full-stack coverage",
+        axis="language_layer_coverage",
+        title="Mapped language-layer coverage",
         value=float(len(layers)),
-        unit="stack layers",
-        tier=TIER_TOP_1 if len(layers) >= 4 else TIER_NOTABLE,
+        unit="mapped layers",
+        status=STATUS_DERIVED,
         evidence=(
-            f"Shipped repositories lead in {len(layers)} distinct stack "
-            f"layers: {', '.join(layers)} — frontend through infrastructure "
-            "in one pair of hands"
+            f"The static language map places the visible corpus in {len(layers)} layers: "
+            f"{', '.join(layers) if layers else 'none'}"
         ),
-        source=(
-            "Layer mapping over primary languages of owned non-fork repos; "
-            "covering 4+ layers with shipped code is the working definition "
-            "of full-stack, and polyglot shipping at this breadth is a "
-            "top-percentile behavior (see language_breadth baseline)"
-        ),
+        source="Deterministic primary-language-to-layer mapping in src/laurea/detectors.py",
         analysis=(
-            "One person covering roles a company staffs separately: frontend, "
-            "backend, infrastructure, native, and creative coding. "
-            "'Full-stack' is usually a resume word; here it is a measured property."
+            "This is a corpus classification, not evidence that one person authored, "
+            "shipped, or is proficient in every mapped layer."
         ),
     )
 
@@ -220,71 +211,19 @@ def tenure(snapshot: Snapshot) -> Finding:
     years = (datetime.now(timezone.utc) - created).days / 365.25
     return Finding(
         axis="tenure",
-        title="Tenure",
+        title="Account age",
         value=round(years, 1),
         unit="years",
-        tier=TIER_NOTABLE,
-        evidence=f"On GitHub since {created.year} — {years:.1f} years of shipped history",
-        source="Account creation date (no percentile claimed for tenure)",
-        analysis=(
-            "A decade of public, timestamped history. The output measured above "
-            "is a trajectory, not a sprint — and every year of it is auditable."
-        ),
-    )
-
-
-def composite_python_full_stack(findings: list[Finding], snapshot: Snapshot) -> Finding | None:
-    """The headline: a top-1% Python full-stack OUTPUT PROFILE, as a conjunction.
-
-    Deliberately scoped: the conjunction classifies measured output (scale,
-    breadth, operational complexity) — it does not and cannot rank
-    engineering ability, code quality, or impact (see NOT_MEASURED).
-
-    Requires ALL of: contribution volume at top-1% floor or better,
-    portfolio size at top-1% floor or better, Python leading the shipped
-    corpus, and full-stack layer coverage. If any leg fails, the
-    composite does not render — the claim deletes itself.
-    """
-    by_axis = {f.axis: f for f in findings}
-    legs = ("contributions_year", "repos_owned", "full_stack_coverage")
-    if any(a not in by_axis for a in legs):
-        return None
-    if any(tier_rank(by_axis[a].tier) > tier_rank(TIER_TOP_1) for a in legs):
-        return None
-    langs = _langs(snapshot)
-    if not langs or max(langs, key=lambda k: langs[k]) != "Python":
-        return None
-    python_repos = langs["Python"]
-    return Finding(
-        axis="composite_python_full_stack",
-        title="Python full-stack output profile — composite placement",
-        value=1.0,
-        unit="percentile floor",
-        tier=TIER_TOP_1,
-        evidence=(
-            f"Conjunction holds: {by_axis['contributions_year'].value:,.0f} "
-            f"contributions/yr (top-1% floor cleared), "
-            f"{by_axis['repos_owned'].value:,.0f} owned repos (top-1% floor "
-            f"cleared), Python leads the corpus ({python_repos} repos), and "
-            f"shipped code spans {by_axis['full_stack_coverage'].value:.0f} "
-            "stack layers. A conjunction of independent top-1% conditions "
-            "is at most as common as its rarest member — the composite "
-            "top-1% claim is therefore a floor, not an estimate."
-        ),
-        source="Conjunction over the cited per-axis baselines (see METHODOLOGY.md)",
-        analysis=(
-            "Read it like an underwriter: each leg alone places its holder past "
-            "the 99th percentile, and holding all four simultaneously is rarer "
-            "than any single leg. At most 1 engineer in 100 can make this claim; "
-            "this one re-proves it by machine every morning."
-        ),
+        status=STATUS_MEASURED,
+        evidence=f"The GitHub account was created in {created.year} ({years:.1f} years ago)",
+        source="GitHub GraphQL user.createdAt",
+        analysis="Account age is not equivalent to continuous professional experience or activity.",
     )
 
 
 def run_all(snapshot: Snapshot) -> list[Finding]:
-    findings = [f for det in REGISTRY if (f := det(snapshot)) is not None]
-    composite = composite_python_full_stack(findings, snapshot)
-    if composite:
-        findings.insert(0, composite)
-    findings.sort(key=lambda f: (tier_rank(f.tier), -f.value))
+    """Validate one snapshot, then return its bounded observations."""
+    _validate_snapshot(snapshot)
+    findings = [finding for fn in REGISTRY if (finding := fn(snapshot)) is not None]
+    findings.sort(key=lambda finding: (status_rank(finding.status), finding.axis))
     return findings
