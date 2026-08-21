@@ -29,15 +29,13 @@ MUTED = "#8b949e"
 
 _STATUS_COLOR = {STATUS_MEASURED: GOLD, STATUS_DERIVED: MUTED}
 
-_STYLE = f"""
-  <style>
+_STYLE = f"""<style>
     .t {{ font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {FG}; }}
     .big {{ font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {GOLD}; }}
     .status {{ font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }}
     .ev {{ font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {MUTED}; }}
     .fade {{ opacity: 1; }}
-  </style>
-"""
+  </style>"""
 
 
 def _shimmer(uid: str) -> str:
