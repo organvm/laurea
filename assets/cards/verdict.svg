@@ -1,16 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="420" height="230" viewBox="0 0 420 230" role="img" aria-label="Verdict meter — reception signals">
-  
   <style>
     .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
     .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
-    .tier { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    .status { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
     .ev { font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
-    .fade { opacity: 0; animation: fadein 0.9s ease-out forwards; }
-    .d1 { animation-delay: 0.15s; } .d2 { animation-delay: 0.3s; }
-    .d3 { animation-delay: 0.45s; } .d4 { animation-delay: 0.6s; }
-    @keyframes fadein { to { opacity: 1; } }
+    .fade { opacity: 1; }
   </style>
-
   <defs>
   <linearGradient id="shV" x1="0%" y1="0%" x2="100%" y2="0%">
     <stop offset="0%" stop-color="#9e7b2a"/>
