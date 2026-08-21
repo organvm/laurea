@@ -22,7 +22,7 @@ and publication boundary are in [METHODOLOGY.md](METHODOLOGY.md).
 
 ## What the snapshot contains
 
-- GitHub contribution-calendar events and their API-provided categories;
+- GitHub contribution-calendar events and associated API-provided fields;
 - pull requests opened in the trailing contribution collection;
 - non-fork repositories visible across the personal account and returned
   organization memberships;
@@ -43,7 +43,9 @@ orders rows by activity count for navigation; it is not a quality ranking.
 
 1. Use the repository as a template or fork it.
 2. Enable Actions. The canonical `organvm/laurea` repository tracks `4444J99`;
-   every other copy tracks its own repository owner.
+   a personal copy defaults to its repository owner. An organization-owned copy
+   must set the repository variable `LAUREA_LOGIN` to the user account it is
+   explicitly authorized to measure.
 3. Optionally add a `LAUREA_TOKEN` secret if the run should include restricted
    contribution counts and private organization visibility.
 4. Embed a generated card, for example

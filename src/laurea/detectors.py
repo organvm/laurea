@@ -56,7 +56,7 @@ def _validate_snapshot(snapshot: Snapshot) -> None:
     contributions = snapshot.get("contributions")
     required = ("total", "commits", "pull_requests", "reviews", "issues", "restricted")
     if not isinstance(contributions, dict) or any(
-        not isinstance(contributions.get(key), int) or contributions[key] < 0
+        type(contributions.get(key)) is not int or contributions[key] < 0
         for key in required
     ):
         raise ValueError("snapshot.contributions contains incomplete counts")
@@ -87,11 +87,11 @@ def contributions_year(snapshot: Snapshot) -> Finding:
         unit="contribution events",
         status=STATUS_MEASURED,
         evidence=(
-            f"GitHub reports {total:,} contribution-calendar events in the last 12 months "
-            f"({contributions['commits']:,} commits, "
+            f"GitHub reports {total:,} contribution-calendar events in the last 12 months. "
+            f"Associated API fields report {contributions['commits']:,} commits, "
             f"{contributions['pull_requests']:,} pull requests, "
             f"{contributions['reviews']:,} reviews, and "
-            f"{contributions['issues']:,} issues)"
+            f"{contributions['issues']:,} issues; these fields are not an additive breakdown"
         ),
         source="GitHub GraphQL contributionsCollection and contributionCalendar",
         analysis=(
@@ -214,7 +214,7 @@ def tenure(snapshot: Snapshot) -> Finding:
         title="Account age",
         value=round(years, 1),
         unit="years",
-        status=STATUS_MEASURED,
+        status=STATUS_DERIVED,
         evidence=f"The GitHub account was created in {created.year} ({years:.1f} years ago)",
         source="GitHub GraphQL user.createdAt",
         analysis="Account age is not equivalent to continuous professional experience or activity.",

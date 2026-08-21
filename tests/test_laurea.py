@@ -10,8 +10,9 @@ from pathlib import Path
 import pytest
 
 from laurea.baselines import STATUS_DERIVED, STATUS_MEASURED
-from laurea.cli import _compute, _load
+from laurea.cli import _compute, _load, _render
 from laurea.detectors import run_all
+from laurea.github import collect
 from laurea.models import Report
 from laurea.render import PUBLIC_LIMITATION, render_all
 
@@ -83,6 +84,15 @@ def test_findings_are_measurements_or_transformations_not_rankings():
     assert "top 1%" not in serialized
     assert "reviewed, mergeable" not in rendered_evidence
     assert "shipped units" not in rendered_evidence
+    tenure_finding = next(finding for finding in findings if finding.axis == "tenure")
+    assert tenure_finding.status == STATUS_DERIVED
+
+
+def test_contribution_fields_are_not_presented_as_an_additive_breakdown():
+    finding = next(
+        item for item in run_all(_snapshot()) if item.axis == "contributions_year"
+    )
+    assert "not an additive breakdown" in finding.evidence
 
 
 def test_repository_visibility_is_not_attributed_as_individual_ownership():
@@ -134,6 +144,24 @@ def test_profile_states_boundaries_and_never_duplicates_terminal_periods():
     assert "No percentile ranking is published" in profile
     assert "does not establish" in profile
     assert ".." not in profile
+    assert "**Observed:** 9.6 years" in profile
+
+
+def test_render_removes_withdrawn_ranked_artifacts(tmp_path):
+    legacy_paths = (
+        "SUPERLATIVES.md",
+        "cards/repos_owned.svg",
+        "cards/orgs_operated.svg",
+        "cards/full_stack_coverage.svg",
+    )
+    for relative_path in legacy_paths:
+        path = tmp_path / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("withdrawn ranking")
+
+    _render(_report(), tmp_path)
+
+    assert all(not (tmp_path / relative_path).exists() for relative_path in legacy_paths)
 
 
 def test_compute_records_environment_provenance_and_utc_time(monkeypatch, tmp_path):
@@ -152,7 +180,7 @@ def test_compute_records_environment_provenance_and_utc_time(monkeypatch, tmp_pa
     assert report.source_sha == "abc1234"
 
 
-def test_compute_and_legacy_load_use_honest_unknown_provenance(monkeypatch, tmp_path):
+def test_compute_and_load_use_honest_unknown_provenance(monkeypatch, tmp_path):
     snapshot = _snapshot()
     monkeypatch.setattr("laurea.cli.resolve_token", lambda: "token")
     monkeypatch.setattr("laurea.cli.collect", lambda login, _auth: snapshot)
@@ -173,8 +201,38 @@ def test_compute_and_legacy_load_use_honest_unknown_provenance(monkeypatch, tmp_
     assert loaded.source_sha == "unknown"
 
 
+def test_load_rejects_legacy_schema_and_unknown_status(tmp_path):
+    payload = _report().to_dict()
+    payload["schema_version"] = "laurea.report.v1"
+    (tmp_path / "metrics.json").write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match="unsupported metrics schema"):
+        _load(tmp_path)
+
+    payload["schema_version"] = "laurea.report.v2"
+    payload["findings"][0]["status"] = "ranked"
+    (tmp_path / "metrics.json").write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match="measured or derived"):
+        _load(tmp_path)
+
+
+def test_boolean_contribution_counts_fail_closed():
+    contributions = _snapshot()["contributions"]
+    contributions["commits"] = True
+    with pytest.raises(ValueError, match="incomplete counts"):
+        run_all(_snapshot(contributions=contributions))
+
+
+def test_non_user_subject_fails_before_repository_pagination(monkeypatch):
+    monkeypatch.setattr("laurea.github._gql", lambda *_args, **_kwargs: {"user": None})
+    with pytest.raises(ValueError, match="not a user"):
+        collect("organization-login", "token")
+
+
 def test_scheduled_workflow_selects_canonical_subject_without_breaking_forks():
-    workflow = Path(".github/workflows/laurea.yml").read_text()
+    workflow = (
+        Path(__file__).resolve().parents[1] / ".github" / "workflows" / "laurea.yml"
+    ).read_text()
     assert "github.repository == 'organvm/laurea'" in workflow
+    assert "vars.LAUREA_LOGIN" in workflow
     assert "github.repository_owner" in workflow
     assert 'laurea run --login "$LAUREA_LOGIN"' in workflow

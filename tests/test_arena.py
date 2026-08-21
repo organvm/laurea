@@ -44,7 +44,7 @@ def _report(login="tester", contributions=26_000, generated_at="2026-07-05T23:30
 def test_row_uses_utc_date_and_measured_axis_count():
     row = build_row(_report())
     assert row["verified"] == "2026-07-06"
-    assert row["measured_axes"] == 5
+    assert row["measured_axes"] == 4
     assert row["contributions"] == 26_000
 
 

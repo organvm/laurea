@@ -6,6 +6,7 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .baselines import STATUS_MEASURED
 from .models import Report
 
 _MARK_START = "<!-- arena:rows:start -->"
@@ -44,7 +45,9 @@ def build_row(report: Report) -> dict:
         "prs": value("pull_requests_year"),
         "repos": value("repos_visible"),
         "languages": value("language_breadth"),
-        "measured_axes": sum(finding.status == "measured" for finding in report.findings),
+        "measured_axes": sum(
+            finding.status == STATUS_MEASURED for finding in report.findings
+        ),
         "verified": verified_date,
     }
 

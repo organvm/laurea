@@ -1,4 +1,4 @@
-"""Animated SVG cards and the generated bounded activity report."""
+"""SVG cards and the generated bounded activity report."""
 
 from __future__ import annotations
 
@@ -128,8 +128,11 @@ def hero_card(report: Report) -> str:
 
 def axis_card(finding: Finding) -> str:
     """Render one measured or derived observation with bounded copy."""
-    color = _STATUS_COLOR[finding.status]
-    evidence_lines = _wrap(finding.evidence, 58)[:3]
+    color = _STATUS_COLOR.get(finding.status, MUTED)
+    wrapped_evidence = _wrap(finding.evidence, 58)
+    evidence_lines = wrapped_evidence[:3]
+    if len(wrapped_evidence) > 3:
+        evidence_lines[-1] = f"{evidence_lines[-1]} …"
     evidence = "".join(
         f'<text class="ev fade d{index + 2}" x="24" y="{104 + index * 16}">{escape(line)}</text>'
         for index, line in enumerate(evidence_lines)
@@ -163,7 +166,7 @@ def profile_md(report: Report) -> str:
         lines += [
             f"## {finding.title} — **{finding.status}**",
             "",
-            f"**Observed:** {finding.value:,.0f} {finding.unit}",
+            f"**Observed:** {_fmt(finding.value)} {finding.unit}",
             "",
             f"{evidence}.",
             "",

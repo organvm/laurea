@@ -15,9 +15,10 @@ prove that a threshold is the 99th or 99.9th percentile of a defined population.
 ## Direct measurements
 
 - `contributions_year` uses
-  `contributionsCollection.contributionCalendar.totalContributions` and shows
-  the API-provided commit, pull-request, review, issue, and restricted counts.
-  A contribution event is not a standardized unit of shipped work.
+  `contributionsCollection.contributionCalendar.totalContributions`. It also
+  shows associated API fields for commits, pull requests, reviews, and issues;
+  those fields are neither disjoint nor an additive breakdown of the calendar
+  total. A contribution event is not a standardized unit of shipped work.
 - `pull_requests_year` uses
   `contributionsCollection.totalPullRequestContributions`. It counts opened
   pull requests; it does not report review, mergeability, or merge status.
@@ -47,10 +48,12 @@ Every report records its subject, generation time, source repository, and source
 SHA. Outside GitHub Actions, unavailable provenance is recorded as `unknown`
 rather than fabricated.
 
-The central scheduled workflow deliberately measures `4444J99`; template copies
-and forks measure `github.repository_owner`. Reports with malformed repository
-entries or incomplete contribution fields fail rather than silently publishing
-partial aggregates.
+The central scheduled workflow deliberately measures `4444J99`. Personal copies
+default to `github.repository_owner`; an organization-owned copy must set the
+repository variable `LAUREA_LOGIN` to the user account it is authorized to
+measure. Non-user subjects, malformed repository entries, and incomplete
+contribution fields fail clearly rather than silently publishing partial
+aggregates.
 
 ## Reinstating a ranking
 
