@@ -122,6 +122,8 @@ def test_rendered_assets_are_valid_and_wrap_bounded_hero_copy():
     assert "Measured GitHub activity profile" in hero
     assert "organization memberships" in hero
     assert hero.count("<tspan") >= 9
+    assert ".fade { opacity: 1;" in hero
+    assert "prefers-reduced-motion: reduce" in hero
     rendered_text = " ".join(" ".join(ET.fromstring(hero).itertext()).split())
     assert PUBLIC_LIMITATION in rendered_text
     assert "Top 1%" not in hero

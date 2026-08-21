@@ -35,10 +35,11 @@ _STYLE = f"""
     .big {{ font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {GOLD}; }}
     .status {{ font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }}
     .ev {{ font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {MUTED}; }}
-    .fade {{ opacity: 0; animation: fadein 0.9s ease-out forwards; }}
+    .fade {{ opacity: 1; animation: fadein 0.9s ease-out both; }}
     .d1 {{ animation-delay: 0.15s; }} .d2 {{ animation-delay: 0.3s; }}
     .d3 {{ animation-delay: 0.45s; }} .d4 {{ animation-delay: 0.6s; }}
-    @keyframes fadein {{ to {{ opacity: 1; }} }}
+    @keyframes fadein {{ from {{ opacity: 0; }} to {{ opacity: 1; }} }}
+    @media (prefers-reduced-motion: reduce) {{ .fade {{ animation: none; }} }}
   </style>
 """
 
