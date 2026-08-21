@@ -15,9 +15,8 @@ NOT_MEASURED = (
     "product adoption, user satisfaction, or business impact",
     "professional experience or engineering judgment",
 )
-PUBLIC_LIMITATION = (
-    "GitHub activity does not establish authorship, quality, reliability, adoption, or impact."
-)
+PUBLIC_LIMITATION = "GitHub activity does not establish authorship, quality, reliability, adoption, or impact."
+CARD_BOUNDARY = "Boundary: not proof of authorship, quality, proficiency, or impact."
 
 GOLD = "#e3b341"
 GOLD_DIM = "#9e7b2a"
@@ -32,7 +31,7 @@ _STATUS_COLOR = {STATUS_MEASURED: GOLD, STATUS_DERIVED: MUTED}
 _STYLE = f"""<style>
     .t {{ font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {FG}; }}
     .big {{ font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {GOLD}; }}
-    .status {{ font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }}
+    .status, .tier {{ font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }}
     .ev {{ font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: {MUTED}; }}
     .fade {{ opacity: 1; }}
   </style>"""
@@ -86,6 +85,16 @@ def _wrap(text: str, width: int) -> list[str]:
     return lines
 
 
+def _truncate(text: str, width: int) -> str:
+    """Fit one label into a fixed-width card heading."""
+    if len(text) <= width:
+        return text
+    prefix = text[: width - 1].rstrip()
+    if " " in prefix:
+        prefix = prefix.rsplit(" ", 1)[0]
+    return f"{prefix}…"
+
+
 def _tspans(lines: list[str], x: int, line_height: int = 14) -> str:
     return "".join(
         f'<tspan x="{x}" dy="{0 if index == 0 else line_height}">{escape(line)}</tspan>'
@@ -96,11 +105,16 @@ def _tspans(lines: list[str], x: int, line_height: int = 14) -> str:
 def hero_card(report: Report) -> str:
     """Render a generic profile card without population-ranking claims."""
     contributions = report.snapshot["contributions"]
-    repositories = len([repo for repo in report.snapshot["repos"] if repo["isFork"] is False])
+    repositories = len(
+        [repo for repo in report.snapshot["repos"] if repo["isFork"] is False]
+    )
     stats = (
         (f"{contributions['total']:,}", ["contribution events", "trailing 12 months"]),
         (f"{repositories:,}", ["non-fork repositories", "visible corpus"]),
-        (f"{contributions['pull_requests']:,}", ["pull requests opened", "trailing 12 months"]),
+        (
+            f"{contributions['pull_requests']:,}",
+            ["pull requests opened", "trailing 12 months"],
+        ),
         (f"{len(report.snapshot['orgs'])}", ["organization memberships", "queried"]),
     )
     columns = "".join(
@@ -112,7 +126,11 @@ def hero_card(report: Report) -> str:
         for index, (value, labels) in enumerate(stats)
     )
     limitation = _tspans(_wrap(PUBLIC_LIMITATION, 86), 400, 15)
-    source = report.source_repository if report.source_repository != "unknown" else "source repository unavailable"
+    source = (
+        report.source_repository
+        if report.source_repository != "unknown"
+        else "source repository unavailable"
+    )
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="800" height="270" viewBox="0 0 800 270" role="img" aria-label="Measured GitHub activity profile">
   {_STYLE}
   <defs>{_shimmer("H")}{_shimmer("L")}</defs>
@@ -141,11 +159,12 @@ def axis_card(finding: Finding) -> str:
   {_STYLE}
   <defs>{_shimmer("L")}</defs>
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="{PANEL}" stroke="{BORDER}"/>
-  <text class="t fade" x="24" y="34">{escape(finding.title)}</text>
+  <text class="t fade" x="24" y="34">{escape(_truncate(finding.title, 34))}</text>
   <text class="status fade d1" x="396" y="34" text-anchor="end" fill="{color}">{escape(finding.status.upper())}</text>
   <text class="big fade d1" x="24" y="76">{escape(_fmt(finding.value))}</text>
   <text class="ev fade d2" x="{30 + 21 * len(_fmt(finding.value))}" y="76">{escape(finding.unit)}</text>
   {evidence}
+  <text class="ev fade d4" x="24" y="157">{escape(CARD_BOUNDARY)}</text>
 </svg>
 """
 
@@ -155,10 +174,14 @@ def profile_md(report: Report) -> str:
     lines = [
         "# MEASURED PROFILE",
         "",
-        f"*Generated {report.generated_at} for [@{report.login}](https://github.com/{report.login}). "
-        "Counts come from the GitHub API; derived observations name their transformation. "
-        "No percentile ranking is published because this repository does not carry a validated "
-        "population distribution.*",
+        (
+            f"*Generated {report.generated_at} for [@{report.login}]"
+            f"(https://github.com/{report.login}). Counts come from the GitHub API; "
+            "derived observations name their transformation. No percentile ranking is "
+            "published because this repository does not carry a validated population distribution.*"
+        ),
+        "",
+        f"*Source implementation: `{report.source_repository}` at `{report.source_sha}`.*",
         "",
     ]
     for finding in report.findings:

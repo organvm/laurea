@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .baselines import STATUS_MEASURED
@@ -34,8 +34,8 @@ def build_row(report: Report) -> dict:
         return int(finding.value) if finding else 0
 
     try:
-        verified = datetime.fromisoformat(report.generated_at.replace("Z", "+00:00"))
-        verified_date = verified.astimezone(timezone.utc).date().isoformat()
+        verified = datetime.fromisoformat(report.generated_at)
+        verified_date = verified.astimezone(UTC).date().isoformat()
     except ValueError:
         verified_date = report.generated_at.split()[0]
 
@@ -53,13 +53,18 @@ def build_row(report: Report) -> dict:
 
 
 def _parse_rows(text: str) -> list[dict]:
+    # Version 0.1 stored an unsupported percentile label in column seven and
+    # used different repository semantics. Those rows cannot be relabeled as
+    # v0.2 measurements; the next arena run safely starts a new table.
+    if "| best floor |" in text:
+        return []
     rows = []
-    match = re.search(f"{_MARK_START}\n(.*?){_MARK_END}", text, re.S)
+    match = re.search(f"{_MARK_START}\n(.*?){_MARK_END}", text, re.DOTALL)
     if not match:
         return rows
     for line in match.group(1).splitlines():
         cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-        if len(cells) == 8 and cells[0].isdigit():
+        if len(cells) == 8 and cells[0].isdigit() and cells[6].isdigit():
             rows.append(
                 {
                     "login": cells[1].strip("`@"),
@@ -77,7 +82,11 @@ def _parse_rows(text: str) -> list[dict]:
 def update_leaderboard(path: Path, row: dict) -> str:
     """Replace one login's row, order by activity count, and write the table."""
     rows = _parse_rows(path.read_text()) if path.exists() else []
-    rows = [candidate for candidate in rows if candidate["login"].lower() != row["login"].lower()]
+    rows = [
+        candidate
+        for candidate in rows
+        if candidate["login"].lower() != row["login"].lower()
+    ]
     rows.append(row)
     rows.sort(key=lambda candidate: -candidate["contributions"])
     body = "".join(

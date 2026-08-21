@@ -14,7 +14,8 @@ from laurea.cli import _compute, _load, _render
 from laurea.detectors import run_all
 from laurea.github import collect
 from laurea.models import Report
-from laurea.render import PUBLIC_LIMITATION, render_all
+from laurea.render import CARD_BOUNDARY, PUBLIC_LIMITATION, render_all
+from laurea.verdict import verdict_card
 
 
 def _snapshot(**overrides):
@@ -96,7 +97,9 @@ def test_contribution_fields_are_not_presented_as_an_additive_breakdown():
 
 
 def test_repository_visibility_is_not_attributed_as_individual_ownership():
-    finding = next(item for item in run_all(_snapshot()) if item.axis == "repos_visible")
+    finding = next(
+        item for item in run_all(_snapshot()) if item.axis == "repos_visible"
+    )
     assert finding.value == 17
     assert "visible" in finding.evidence.lower()
     assert "authorship" in finding.analysis.lower()
@@ -138,6 +141,16 @@ def test_rendered_assets_are_valid_and_wrap_bounded_hero_copy():
     assert PUBLIC_LIMITATION in rendered_text
     assert "Top 1%" not in hero
 
+    language_card = assets["cards/language_breadth.svg"]
+    language_root = ET.fromstring(language_card)
+    heading = next(
+        element.text
+        for element in language_root.iter()
+        if element.attrib.get("y") == "34"
+    )
+    assert heading.endswith("…")
+    assert CARD_BOUNDARY in " ".join(language_root.itertext())
+
 
 def test_profile_states_boundaries_and_never_duplicates_terminal_periods():
     profile = render_all(_report())["PROFILE.md"]
@@ -145,6 +158,13 @@ def test_profile_states_boundaries_and_never_duplicates_terminal_periods():
     assert "does not establish" in profile
     assert ".." not in profile
     assert "**Observed:** 9.6 years" in profile
+    assert "`organvm/laurea` at `abc1234`" in profile
+
+
+def test_verdict_card_retains_tier_styling():
+    card = verdict_card([{"date": "2026-08-20", "followers": 1, "stars_estate": 2}])
+    assert ".status, .tier" in card
+    assert 'class="tier fade"' in card
 
 
 def test_render_removes_withdrawn_ranked_artifacts(tmp_path):
@@ -161,20 +181,24 @@ def test_render_removes_withdrawn_ranked_artifacts(tmp_path):
 
     _render(_report(), tmp_path)
 
-    assert all(not (tmp_path / relative_path).exists() for relative_path in legacy_paths)
+    assert all(
+        not (tmp_path / relative_path).exists() for relative_path in legacy_paths
+    )
 
 
 def test_compute_records_environment_provenance_and_utc_time(monkeypatch, tmp_path):
     snapshot = _snapshot(login="4444J99")
     monkeypatch.setattr("laurea.cli.resolve_token", lambda: "token")
     monkeypatch.setattr("laurea.cli.collect", lambda login, _auth: snapshot)
-    monkeypatch.setattr("laurea.cli.collect_verdict", lambda *args: {"date": "2026-08-20"})
+    monkeypatch.setattr(
+        "laurea.cli.collect_verdict", lambda *args: {"date": "2026-08-20"}
+    )
     monkeypatch.setattr("laurea.cli.append_entry", lambda *args: None)
     monkeypatch.setenv("GITHUB_REPOSITORY", "organvm/laurea")
     monkeypatch.setenv("GITHUB_SHA", "abc1234")
 
     report = _compute("4444J99", tmp_path)
-    generated = datetime.fromisoformat(report.generated_at.replace("Z", "+00:00"))
+    generated = datetime.fromisoformat(report.generated_at)
     assert generated.utcoffset().total_seconds() == 0
     assert report.source_repository == "organvm/laurea"
     assert report.source_sha == "abc1234"
@@ -184,7 +208,9 @@ def test_compute_and_load_use_honest_unknown_provenance(monkeypatch, tmp_path):
     snapshot = _snapshot()
     monkeypatch.setattr("laurea.cli.resolve_token", lambda: "token")
     monkeypatch.setattr("laurea.cli.collect", lambda login, _auth: snapshot)
-    monkeypatch.setattr("laurea.cli.collect_verdict", lambda *args: {"date": "2026-08-20"})
+    monkeypatch.setattr(
+        "laurea.cli.collect_verdict", lambda *args: {"date": "2026-08-20"}
+    )
     monkeypatch.setattr("laurea.cli.append_entry", lambda *args: None)
     monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
     monkeypatch.delenv("GITHUB_SHA", raising=False)

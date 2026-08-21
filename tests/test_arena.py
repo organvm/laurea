@@ -7,7 +7,9 @@ from laurea.detectors import run_all
 from laurea.models import Report
 
 
-def _report(login="tester", contributions=26_000, generated_at="2026-07-05T23:30:00-04:00"):
+def _report(
+    login="tester", contributions=26_000, generated_at="2026-07-05T23:30:00-04:00"
+):
     snapshot = {
         "login": login,
         "name": login,
@@ -56,3 +58,17 @@ def test_leaderboard_orders_activity_and_deduplicates(tmp_path):
     assert text.index("bob") < text.index("alice")
     assert text.count("@alice") == 1
     assert "not rankings of engineering quality" in text
+
+
+def test_leaderboard_discards_incompatible_v1_rank_rows(tmp_path):
+    leaderboard = tmp_path / "LEADERBOARD.md"
+    leaderboard.write_text(
+        "<!-- arena:rows:start -->\n"
+        "| # | login | contributions/yr | PRs/yr | repos | languages | best floor | verified |\n"
+        "| 1 | `@legacy` | 1,000 | 20 | 30 | 4 | top 0.1% | 2026-07-05 |\n"
+        "<!-- arena:rows:end -->\n"
+    )
+    text = update_leaderboard(leaderboard, build_row(_report("current", 200)))
+    assert "@legacy" not in text
+    assert "top 0.1%" not in text
+    assert "@current" in text
