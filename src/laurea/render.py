@@ -119,7 +119,7 @@ def hero_card(report: Report) -> str:
   {_STYLE}
   <defs>{_shimmer("H")}{_shimmer("L")}</defs>
   <rect width="799" height="269" x="0.5" y="0.5" rx="12" fill="{BG}" stroke="{BORDER}"/>
-  {_laurel(400, 76, 1.1)}
+  {_laurel(400, 62, 0.65)}
   <text class="status fade" fill="url(#shH)" text-anchor="middle" x="400" y="96" style="font-size:20px">MEASURED GITHUB ACTIVITY PROFILE</text>
   <text class="ev fade d1" text-anchor="middle" x="400" y="119">{limitation}</text>
   {columns}
