@@ -2,7 +2,7 @@
   <style>
     .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
     .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
-    .status { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    .status, .tier { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
     .ev { font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
     .fade { opacity: 1; }
   </style>
@@ -21,4 +21,5 @@
   <text class="big fade d1" x="24" y="76">5</text>
   <text class="ev fade d2" x="51" y="76">mapped layers</text>
   <text class="ev fade d2" x="24" y="104">The static language map places the visible corpus in 5</text><text class="ev fade d3" x="24" y="120">layers: backend, creative, frontend, infra, native</text>
+  <text class="ev fade d4" x="24" y="157">Boundary: not proof of authorship, quality, proficiency, or impact.</text>
 </svg>

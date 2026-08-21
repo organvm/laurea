@@ -2,7 +2,7 @@
   <style>
     .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
     .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
-    .status { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    .status, .tier { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
     .ev { font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
     .fade { opacity: 1; }
   </style>
@@ -16,9 +16,10 @@
   </linearGradient>
 </defs>
   <rect width="419" height="169" x="0.5" y="0.5" rx="10" fill="#161b22" stroke="#30363d"/>
-  <text class="t fade" x="24" y="34">Primary-language breadth of the visible corpus</text>
+  <text class="t fade" x="24" y="34">Primary-language breadth of the…</text>
   <text class="status fade d1" x="396" y="34" text-anchor="end" fill="#8b949e">DERIVED</text>
   <text class="big fade d1" x="24" y="76">17</text>
   <text class="ev fade d2" x="72" y="76">primary-language labels</text>
   <text class="ev fade d2" x="24" y="104">GitHub assigns 17 distinct primary-language labels across</text><text class="ev fade d3" x="24" y="120">the visible non-fork corpus — led by Python (109),</text><text class="ev fade d4" x="24" y="136">TypeScript (50), HTML (24), JavaScript (21), Shell (15)</text>
+  <text class="ev fade d4" x="24" y="157">Boundary: not proof of authorship, quality, proficiency, or impact.</text>
 </svg>

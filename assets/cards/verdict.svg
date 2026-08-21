@@ -2,7 +2,7 @@
   <style>
     .t { font: 600 15px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e6edf3; }
     .big { font: 700 34px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #e3b341; }
-    .status { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    .status, .tier { font: 700 13px 'Segoe UI', Helvetica, Arial, sans-serif; letter-spacing: 1px; }
     .ev { font: 400 12px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
     .fade { opacity: 1; }
   </style>

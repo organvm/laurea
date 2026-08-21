@@ -1,6 +1,8 @@
 # MEASURED PROFILE
 
-*Generated 2026-08-21T13:13:35.920345Z for [@4444J99](https://github.com/4444J99). Counts come from the GitHub API; derived observations name their transformation. No percentile ranking is published because this repository does not carry a validated population distribution.*
+*Generated 2026-08-21T13:36:17.634675Z for [@4444J99](https://github.com/4444J99). Counts come from the GitHub API; derived observations name their transformation. No percentile ranking is published because this repository does not carry a validated population distribution.*
+
+*Source implementation: `organvm/laurea` at `7fb9c15ef253bc14459519d090447b653750d46d`.*
 
 ## GitHub contribution activity (12 months) — **measured**
 
