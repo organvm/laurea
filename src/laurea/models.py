@@ -39,11 +39,15 @@ class Report:
     generated_at: str
     snapshot: dict[str, Any]
     findings: list[Finding] = field(default_factory=list)
+    source_repository: str = "organvm/laurea"
+    source_sha: str = "unknown"
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "login": self.login,
             "generated_at": self.generated_at,
+            "source_repository": self.source_repository,
+            "source_sha": self.source_sha,
             "snapshot": self.snapshot,
             "findings": [f.to_dict() for f in self.findings],
         }

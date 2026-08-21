@@ -21,6 +21,9 @@ NOT_MEASURED = (
     "(the verdict meter records adoption signals separately)",
     "engineering judgment under uncertainty",
 )
+PUBLIC_LIMITATION = (
+    "GitHub activity does not establish quality, reliability, adoption, or business impact."
+)
 from .models import Finding, Report
 
 GOLD = "#e3b341"
@@ -102,22 +105,22 @@ def _wrap(text: str, width: int) -> list[str]:
 def hero_card(report: Report) -> str:
     composite = report.by_axis("composite_python_full_stack")
     headline = (
-        "TOP 0.1% ENGINEERING THROUGHPUT"
+        f"{composite.tier.title()} GitHub output profile"
         if composite
-        else "ENGINEERING OUTPUT — MEASURED"
+        else "GITHUB OUTPUT PROFILE — MEASURED"
     )
     subline = (
-        "top-1% Python full-stack output profile — scale, breadth, and operational complexity, measured daily"
+        "scale, breadth, and operational complexity measured from GitHub activity"
         if composite
-        else "recomputed daily from the live GitHub API"
+        else "measured from the GitHub API"
     )
     c = report.snapshot["contributions"]
     repos = len([r for r in report.snapshot["repos"] if not r["isFork"]])
     stats = (
-        (f"{c['total']:,}", "contributions / yr"),
-        (f"{repos:,}", "repos owned"),
-        (f"{c['pull_requests']:,}", "PRs / yr"),
-        (f"{len(report.snapshot['orgs'])}", "orgs operated"),
+        (f"{c['total']:,}", "GitHub contributions · trailing 12 months"),
+        (f"{repos:,}", "non-fork repositories visible to this run"),
+        (f"{c['pull_requests']:,}", "pull requests opened · trailing 12 months"),
+        (f"{len(report.snapshot['orgs'])}", "organizations queried"),
     )
     cols = "".join(
         f"""
@@ -133,7 +136,7 @@ def hero_card(report: Report) -> str:
   <rect width="799" height="239" x="0.5" y="0.5" rx="12" fill="{BG}" stroke="{BORDER}"/>
   {_laurel(400, 78, 1.1)}
   <text class="tier fade" fill="url(#shH)" text-anchor="middle" x="400" y="96" style="font-size:20px">{escape(headline)}</text>
-  <text class="ev fade d1" text-anchor="middle" x="400" y="118">{escape(subline)} · top 1% = at least 1 in 100, top 0.1% = at least 1 in 1,000</text>
+  <text class="ev fade d1" text-anchor="middle" x="400" y="118">{escape(subline)} · {escape(PUBLIC_LIMITATION)}</text>
   {cols}
   <text class="ev fade d4" text-anchor="middle" x="400" y="222">LAVREA · the laurels are computed · github.com/{escape(report.login)}/laurea</text>
 </svg>
@@ -218,6 +221,8 @@ def superlatives_md(report: Report) -> str:
         "Those require different evidence (code review, testing, production "
         "performance, real-world outcomes) — tracked as the quality-signal "
         "detector roadmap in the repo's issues, never inferred from volume.",
+        "",
+        PUBLIC_LIMITATION,
         "",
     ]
     return "\n".join(lines)

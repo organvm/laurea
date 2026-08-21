@@ -24,9 +24,11 @@ def _compute(login: str, assets: Path) -> Report:
     now = datetime.now(timezone.utc)
     report = Report(
         login=login,
-        generated_at=now.strftime("%Y-%m-%d %H:%M UTC"),
+        generated_at=now.isoformat().replace("+00:00", "Z"),
         snapshot=snapshot,
         findings=run_all(snapshot),
+        source_repository=os.environ.get("GITHUB_REPOSITORY", "organvm/laurea"),
+        source_sha=os.environ.get("GITHUB_SHA", "unknown"),
     )
     assets.mkdir(parents=True, exist_ok=True)
     (assets / "metrics.json").write_text(json.dumps(report.to_dict(), indent=2))
@@ -43,6 +45,8 @@ def _load(assets: Path) -> Report:
         generated_at=data["generated_at"],
         snapshot=data["snapshot"],
         findings=[Finding(**f) for f in data["findings"]],
+        source_repository=data.get("source_repository", "organvm/laurea"),
+        source_sha=data.get("source_sha", "unknown"),
     )
 
 
@@ -78,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
         snapshot = collect(args.login, resolve_token())
         report = Report(
             login=args.login,
-            generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+            generated_at=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             snapshot=snapshot,
             findings=run_all(snapshot),
         )

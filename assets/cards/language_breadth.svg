@@ -26,5 +26,5 @@
   <text class="ev fade d2" x="396" y="50" text-anchor="end">at least 1 in 100</text>
   <text class="big fade d1" x="24" y="76">17</text>
   <text class="ev fade d2" x="72" y="76">primary languages</text>
-  <text class="ev fade d2" x="24" y="104">17 distinct languages each leading at least one shipped</text><text class="ev fade d3" x="24" y="120">repository — led by Python (101), TypeScript (47), HTML</text><text class="ev fade d4" x="24" y="136">(25), JavaScript (16), Shell (16)</text>
+  <text class="ev fade d2" x="24" y="104">17 distinct languages each leading at least one shipped</text><text class="ev fade d3" x="24" y="120">repository — led by Python (109), TypeScript (50), HTML</text><text class="ev fade d4" x="24" y="136">(24), JavaScript (21), Shell (15)</text>
 </svg>
