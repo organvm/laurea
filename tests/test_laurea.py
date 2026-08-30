@@ -153,11 +153,15 @@ def test_rendered_assets_are_valid_and_wrap_bounded_hero_copy():
 
 
 def test_profile_states_boundaries_and_never_duplicates_terminal_periods(monkeypatch):
+    """Render tenure at the report's declared instant, not the wall clock."""
     report_time = datetime.fromisoformat("2026-08-20T12:00:00+00:00")
 
     class ReportDateTime(datetime):
+        """Datetime shim fixed to the report timestamp for this boundary test."""
+
         @classmethod
         def now(cls, tz=None):
+            """Return the report instant in the requested timezone."""
             return report_time if tz is None else report_time.astimezone(tz)
 
     monkeypatch.setattr("laurea.detectors.datetime", ReportDateTime)
