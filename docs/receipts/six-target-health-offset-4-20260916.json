@@ -1,0 +1,168 @@
+{
+  "observed_at": "2026-09-16T06:20:21.077373+00:00",
+  "source_head": "445b941440d8139de02eec60e7ea546c61bc4213",
+  "purpose": "Independent bounded health observation; not simultaneous estate or relay acceptance",
+  "report": {
+    "schema_version": "laurea.health-batch.v1",
+    "status": "unmeasured",
+    "scope": {
+      "inventory_entries": 6,
+      "entries_attempted": 1,
+      "selection_offset": 4,
+      "selection_end_exclusive": 5,
+      "entries_not_attempted": 5,
+      "private_entries_excluded": 0,
+      "attempted_entries_unmeasured": 0,
+      "public_repository_identities_observed": 1,
+      "duplicate_identity_observations": 0,
+      "inventory_completeness": "unmeasured",
+      "health_acceptance": "unmeasured"
+    },
+    "observations": [
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:20:11.767862+00:00",
+        "generation": "current",
+        "verification": {
+          "status": "measured",
+          "runs_total": 8,
+          "runs_observed": [
+            {
+              "run_id": 34675569830,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 3
+            },
+            {
+              "run_id": 34523371261,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34518086987,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33998001129,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 3
+            },
+            {
+              "run_id": 33509795903,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33509795974,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33509796027,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33509795483,
+              "head_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 3
+            }
+          ],
+          "runs_unmeasured": 0,
+          "acceptance": "unmeasured",
+          "boundary": "Executed steps do not establish the owning verification predicate or required workflow coverage."
+        },
+        "security": {
+          "dependabot": {
+            "status": "measured",
+            "open_alerts_observed": 0,
+            "complete": true,
+            "coverage": "unmeasured",
+            "scope": "Repository-wide open alerts at observation time; not exact-default-SHA coverage.",
+            "boundary": "An empty alert list does not establish enabled scanners, current scans, or required security policy.",
+            "severity_counts_observed": {
+              "critical": 0,
+              "high": 0,
+              "medium": 0,
+              "low": 0,
+              "unmeasured": 0
+            },
+            "severity_status": "measured"
+          },
+          "code_scanning": {
+            "status": "measured",
+            "open_alerts_observed": 0,
+            "complete": true,
+            "coverage": "unmeasured",
+            "scope": "Repository-wide open alerts at observation time; not exact-default-SHA coverage.",
+            "boundary": "An empty alert list does not establish enabled scanners, current scans, or required security policy.",
+            "severity_counts_observed": {
+              "critical": 0,
+              "high": 0,
+              "medium": 0,
+              "low": 0,
+              "unmeasured": 0
+            },
+            "severity_status": "measured"
+          },
+          "secret_scanning": {
+            "status": "unmeasured"
+          }
+        },
+        "pr_readiness": {
+          "status": "measured",
+          "listing_complete": true,
+          "open_observed": 0,
+          "pulls_observed": [],
+          "pulls_unmeasured": 0,
+          "readiness": "unmeasured",
+          "boundary": "At most five PRs are inspected. Exact-head observations do not establish required policy, trusted checks, code-owner approval, or the owning acceptance predicate."
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 1,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 0,
+          "archive_status": "active",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "repository": "organvm/the-thing-without-a-name",
+        "repository_id": 1320324017,
+        "default_sha": "73da6dc1c4339c9cc75c8253c7ef5173e4091256"
+      }
+    ]
+  }
+}

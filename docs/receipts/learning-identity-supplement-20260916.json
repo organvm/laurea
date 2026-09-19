@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-16T07:12:46.251299+00:00",
+  "repository": "organvm/learning-resources",
+  "repository_id": 1155240211,
+  "private": false,
+  "source": "GET /repos/organvm/learning-resources",
+  "supplements": "relay-target-admission-observation-20260916.json",
+  "boundary": "Current identity readback supplements the historical observation; it does not backdate the identity check or establish executed verification."
+}

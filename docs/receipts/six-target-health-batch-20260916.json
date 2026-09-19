@@ -1,0 +1,304 @@
+{
+  "observed_at": "2026-09-16T06:16:47.190987+00:00",
+  "source_head": "f101d3c95a5ba57749e8a9f2ca66dc402da9f453",
+  "purpose": "Read-only six-target health observation; not relay execution or acceptance",
+  "report": {
+    "schema_version": "laurea.health-batch.v1",
+    "status": "unmeasured",
+    "scope": {
+      "inventory_entries": 6,
+      "entries_attempted": 6,
+      "entries_not_attempted": 0,
+      "private_entries_excluded": 0,
+      "attempted_entries_unmeasured": 5,
+      "public_repository_identities_observed": 1,
+      "duplicate_identity_observations": 0,
+      "inventory_completeness": "unmeasured",
+      "health_acceptance": "unmeasured"
+    },
+    "observations": [
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:16:27.091860+00:00",
+        "generation": "current",
+        "verification": {
+          "status": "measured",
+          "runs_total": 8,
+          "runs_observed": [
+            {
+              "run_id": 34704012870,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34704012322,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33976603899,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33976602708,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33341877135,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33341877055,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 33279890564,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 3
+            },
+            {
+              "run_id": 33279868085,
+              "head_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 3
+            }
+          ],
+          "runs_unmeasured": 0,
+          "acceptance": "unmeasured",
+          "boundary": "Executed steps do not establish the owning verification predicate or required workflow coverage."
+        },
+        "security": {
+          "dependabot": {
+            "status": "measured",
+            "open_alerts_observed": 0,
+            "complete": true,
+            "coverage": "unmeasured",
+            "scope": "Repository-wide open alerts at observation time; not exact-default-SHA coverage.",
+            "boundary": "An empty alert list does not establish enabled scanners, current scans, or required security policy.",
+            "severity_counts_observed": {
+              "critical": 0,
+              "high": 0,
+              "medium": 0,
+              "low": 0,
+              "unmeasured": 0
+            },
+            "severity_status": "measured"
+          },
+          "code_scanning": {
+            "status": "unmeasured"
+          },
+          "secret_scanning": {
+            "status": "unmeasured"
+          }
+        },
+        "pr_readiness": {
+          "status": "measured",
+          "listing_complete": true,
+          "open_observed": 1,
+          "pulls_observed": [
+            {
+              "status": "measured",
+              "readiness": "unmeasured",
+              "number": 1,
+              "head_sha": "822029e63ccbfb18e3e822a0d6aa5cc0513118e9",
+              "base_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+              "base_ref": "main",
+              "generation": "current",
+              "draft": false,
+              "mergeable": true,
+              "checks": {
+                "status": "measured",
+                "observed": 0,
+                "successful": 0,
+                "failing": 0,
+                "pending": 0,
+                "other": 0,
+                "required_policy": "unmeasured",
+                "boundary": "Check results alone do not prove trusted producers, executed jobs, or required-check satisfaction."
+              },
+              "reviews": {
+                "status": "measured",
+                "observed": 0,
+                "other_head_reviews": 0,
+                "current_head_approvals": 0,
+                "current_head_changes_requested": 0,
+                "required_policy": "unmeasured"
+              },
+              "blockers": []
+            }
+          ],
+          "pulls_unmeasured": 0,
+          "readiness": "unmeasured",
+          "boundary": "At most five PRs are inspected. Exact-head observations do not establish required policy, trusted checks, code-owner approval, or the owning acceptance predicate."
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 1,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 0,
+          "archive_status": "active",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "repository": "organvm/process-environment-enactment",
+        "repository_id": 1350942566,
+        "default_sha": "ffebb6fa1020098e18020f6a4a845cf933c0df3c"
+      },
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:16:37.186159+00:00",
+        "generation": "unmeasured",
+        "verification": {
+          "status": "unmeasured"
+        },
+        "security": {
+          "status": "unmeasured"
+        },
+        "pr_readiness": {
+          "status": "unmeasured"
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 0,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 1,
+          "archive_status": "unmeasured",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "excluded_private_or_unknown": true
+      },
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:16:47.190684+00:00",
+        "generation": "unmeasured",
+        "verification": {
+          "status": "unmeasured"
+        },
+        "security": {
+          "status": "unmeasured"
+        },
+        "pr_readiness": {
+          "status": "unmeasured"
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 0,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 1,
+          "archive_status": "unmeasured",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "excluded_private_or_unknown": true
+      },
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:16:47.190797+00:00",
+        "generation": "unmeasured",
+        "verification": {
+          "status": "unmeasured"
+        },
+        "security": {
+          "status": "unmeasured"
+        },
+        "pr_readiness": {
+          "status": "unmeasured"
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 0,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 1,
+          "archive_status": "unmeasured",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "excluded_private_or_unknown": true
+      },
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:16:47.190852+00:00",
+        "generation": "unmeasured",
+        "verification": {
+          "status": "unmeasured"
+        },
+        "security": {
+          "status": "unmeasured"
+        },
+        "pr_readiness": {
+          "status": "unmeasured"
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 0,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 1,
+          "archive_status": "unmeasured",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "excluded_private_or_unknown": true
+      },
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:16:47.190902+00:00",
+        "generation": "unmeasured",
+        "verification": {
+          "status": "unmeasured"
+        },
+        "security": {
+          "status": "unmeasured"
+        },
+        "pr_readiness": {
+          "status": "unmeasured"
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 0,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 1,
+          "archive_status": "unmeasured",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "excluded_private_or_unknown": true
+      }
+    ]
+  }
+}

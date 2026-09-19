@@ -7,6 +7,7 @@ from typing import Any, Callable
 
 from .baselines import STATUS_DERIVED, STATUS_MEASURED, status_rank
 from .models import Finding
+from .corpus import corpus_totals, require_complete
 
 Snapshot = dict[str, Any]
 Detector = Callable[[Snapshot], Finding | None]
@@ -44,6 +45,7 @@ def detector(fn: Detector) -> Detector:
 
 
 def _validate_snapshot(snapshot: Snapshot) -> None:
+    require_complete(snapshot)
     repos = snapshot.get("repos")
     if not isinstance(repos, list) or any(
         not isinstance(repo, dict) or not isinstance(repo.get("isFork"), bool)
@@ -67,13 +69,7 @@ def _active_repos(snapshot: Snapshot) -> list[dict[str, Any]]:
 
 
 def _langs(snapshot: Snapshot) -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for repo in _active_repos(snapshot):
-        primary = repo.get("primaryLanguage")
-        language = primary.get("name") if isinstance(primary, dict) else None
-        if isinstance(language, str) and language:
-            counts[language] = counts.get(language, 0) + 1
-    return counts
+    return corpus_totals(snapshot)["primary_languages"]
 
 
 @detector
@@ -103,7 +99,7 @@ def contributions_year(snapshot: Snapshot) -> Finding:
 
 @detector
 def repos_visible(snapshot: Snapshot) -> Finding:
-    count = len(_active_repos(snapshot))
+    count = corpus_totals(snapshot)["nonfork_repositories"]
     return Finding(
         axis="repos_visible",
         title="Visible non-fork repository corpus",
@@ -176,7 +172,7 @@ def organization_memberships(snapshot: Snapshot) -> Finding:
         unit="organizations",
         status=STATUS_MEASURED,
         evidence=f"GitHub returned {count} organization memberships for this account",
-        source="GitHub GraphQL user.organizations (first 20 visible to the token)",
+        source="GitHub GraphQL user.organizations (paginated, visible to the token)",
         analysis=(
             "Membership does not by itself establish ownership, administrative authority, "
             "or individual responsibility for every repository in an organization."

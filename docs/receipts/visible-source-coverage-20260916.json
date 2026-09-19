@@ -1,0 +1,28 @@
+{
+  "observed_at": "2026-09-16T06:03:28.439612+00:00",
+  "source_head": "ea0e3f5bb19b22fa33afcf13cf545d525af9be11",
+  "coverage": {
+    "status": "complete",
+    "scope": "token-visible personal repositories and organization memberships; not an administered-estate census",
+    "organization_scope_complete": true,
+    "sources_attempted": 12,
+    "source_count_scope": "membership discovery and repository connections",
+    "failed_sources": 0,
+    "observed_repositories": 326,
+    "public_repositories": 240,
+    "private_repositories_excluded": 86,
+    "archived_public_repositories": 57,
+    "health_status": "unmeasured"
+  },
+  "organization_memberships_observed": 10,
+  "administered_estate_coverage": "unmeasured",
+  "historical_326_denominator": "not_revalidated_by_this_collector",
+  "authority_observation": {
+    "source": "authenticated REST user/memberships/orgs, active, paginated",
+    "memberships": 10,
+    "active_admin_memberships": 10,
+    "nonadmin_memberships": 0,
+    "unique_organizations": 10,
+    "limitation": "Matching counts do not prove identical membership sets or unrestricted token visibility."
+  }
+}

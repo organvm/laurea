@@ -10,13 +10,21 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
+
+concurrency:
+  group: laurea-publication
+  cancel-in-progress: false
 
 jobs:
   laurels:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.12"
       - run: pip install -e '.[test]'
@@ -32,11 +40,7 @@ jobs:
           # to the user account they are explicitly authorized to measure.
           LAUREA_LOGIN: ${{ github.repository == 'organvm/laurea' && '4444J99' || vars.LAUREA_LOGIN || github.repository_owner }}
         run: laurea run --login "$LAUREA_LOGIN"
-      - name: Commit refreshed assets
-        run: |
-          git config user.name "laurea[bot]"
-          git config user.email "actions@github.com"
-          git add assets
-          git diff --cached --quiet && echo "laurels unchanged" && exit 0
-          git commit -m "laurels: recompute $(date -u +%F)"
-          git push
+      - name: Prepare refreshed assets PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m laurea.publish --kind metrics --refresh-pending

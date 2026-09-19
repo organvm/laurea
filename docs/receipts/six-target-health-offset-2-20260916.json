@@ -1,0 +1,345 @@
+{
+  "observed_at": "2026-09-16T06:19:59.743367+00:00",
+  "source_head": "445b941440d8139de02eec60e7ea546c61bc4213",
+  "purpose": "Independent bounded health observation; not simultaneous estate or relay acceptance",
+  "report": {
+    "schema_version": "laurea.health-batch.v1",
+    "status": "unmeasured",
+    "scope": {
+      "inventory_entries": 6,
+      "entries_attempted": 1,
+      "selection_offset": 2,
+      "selection_end_exclusive": 3,
+      "entries_not_attempted": 5,
+      "private_entries_excluded": 0,
+      "attempted_entries_unmeasured": 0,
+      "public_repository_identities_observed": 1,
+      "duplicate_identity_observations": 0,
+      "inventory_completeness": "unmeasured",
+      "health_acceptance": "unmeasured"
+    },
+    "observations": [
+      {
+        "schema_version": "laurea.health.v1",
+        "status": "unmeasured",
+        "observed_at": "2026-09-16T06:19:37.542518+00:00",
+        "generation": "current",
+        "verification": {
+          "status": "unmeasured",
+          "runs_total": 11,
+          "runs_observed": [
+            {
+              "run_id": 34863136553,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34765981672,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34765910500,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34765905212,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34764947392,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34764904060,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "success",
+              "execution": "executed",
+              "executed_steps": 5,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34764902045,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34764902048,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34764902043,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 1
+            },
+            {
+              "run_id": 34764902036,
+              "head_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "conclusion": "failure",
+              "execution": "no_executed_steps",
+              "executed_steps": 0,
+              "active_steps": 0,
+              "jobs_observed": 3
+            }
+          ],
+          "runs_unmeasured": 1,
+          "acceptance": "unmeasured",
+          "boundary": "Executed steps do not establish the owning verification predicate or required workflow coverage."
+        },
+        "security": {
+          "dependabot": {
+            "status": "measured",
+            "open_alerts_observed": 0,
+            "complete": true,
+            "coverage": "unmeasured",
+            "scope": "Repository-wide open alerts at observation time; not exact-default-SHA coverage.",
+            "boundary": "An empty alert list does not establish enabled scanners, current scans, or required security policy.",
+            "severity_counts_observed": {
+              "critical": 0,
+              "high": 0,
+              "medium": 0,
+              "low": 0,
+              "unmeasured": 0
+            },
+            "severity_status": "measured"
+          },
+          "code_scanning": {
+            "status": "measured",
+            "open_alerts_observed": 0,
+            "complete": true,
+            "coverage": "unmeasured",
+            "scope": "Repository-wide open alerts at observation time; not exact-default-SHA coverage.",
+            "boundary": "An empty alert list does not establish enabled scanners, current scans, or required security policy.",
+            "severity_counts_observed": {
+              "critical": 0,
+              "high": 0,
+              "medium": 0,
+              "low": 0,
+              "unmeasured": 0
+            },
+            "severity_status": "measured"
+          },
+          "secret_scanning": {
+            "status": "unmeasured"
+          }
+        },
+        "pr_readiness": {
+          "status": "unmeasured",
+          "listing_complete": true,
+          "open_observed": 23,
+          "pulls_observed": [
+            {
+              "status": "measured",
+              "readiness": "unmeasured",
+              "number": 202,
+              "head_sha": "9daa8a93f36024eeb53199c20a29724109ea5c1d",
+              "base_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+              "base_ref": "main",
+              "generation": "current",
+              "draft": false,
+              "mergeable": true,
+              "checks": {
+                "status": "measured",
+                "observed": 10,
+                "successful": 0,
+                "failing": 9,
+                "pending": 0,
+                "other": 1,
+                "required_policy": "unmeasured",
+                "boundary": "Check results alone do not prove trusted producers, executed jobs, or required-check satisfaction."
+              },
+              "reviews": {
+                "status": "measured",
+                "observed": 1,
+                "other_head_reviews": 1,
+                "current_head_approvals": 0,
+                "current_head_changes_requested": 0,
+                "required_policy": "unmeasured"
+              },
+              "blockers": []
+            },
+            {
+              "status": "measured",
+              "readiness": "blocked",
+              "number": 176,
+              "head_sha": "13249785f0052edcf9d5d446f2dc41767e6f692c",
+              "base_sha": "0efc9cf5a9998b179dabe9ef815d59a48a50889d",
+              "base_ref": "main",
+              "generation": "current",
+              "draft": true,
+              "mergeable": true,
+              "checks": {
+                "status": "measured",
+                "observed": 10,
+                "successful": 0,
+                "failing": 9,
+                "pending": 0,
+                "other": 1,
+                "required_policy": "unmeasured",
+                "boundary": "Check results alone do not prove trusted producers, executed jobs, or required-check satisfaction."
+              },
+              "reviews": {
+                "status": "measured",
+                "observed": 0,
+                "other_head_reviews": 0,
+                "current_head_approvals": 0,
+                "current_head_changes_requested": 0,
+                "required_policy": "unmeasured"
+              },
+              "blockers": [
+                "draft"
+              ]
+            },
+            {
+              "status": "measured",
+              "readiness": "blocked",
+              "number": 172,
+              "head_sha": "f9aeb3f0bc4a329579dcffa2446d813fa8d84141",
+              "base_sha": "1371aa02ac015b588eb08e9215e819e3bf3fbd18",
+              "base_ref": "main",
+              "generation": "current",
+              "draft": true,
+              "mergeable": true,
+              "checks": {
+                "status": "measured",
+                "observed": 10,
+                "successful": 0,
+                "failing": 9,
+                "pending": 0,
+                "other": 1,
+                "required_policy": "unmeasured",
+                "boundary": "Check results alone do not prove trusted producers, executed jobs, or required-check satisfaction."
+              },
+              "reviews": {
+                "status": "measured",
+                "observed": 0,
+                "other_head_reviews": 0,
+                "current_head_approvals": 0,
+                "current_head_changes_requested": 0,
+                "required_policy": "unmeasured"
+              },
+              "blockers": [
+                "draft"
+              ]
+            },
+            {
+              "status": "measured",
+              "readiness": "blocked",
+              "number": 165,
+              "head_sha": "d31afd6a41155afc5e86e71999b8d7ce21558fd5",
+              "base_sha": "a5bc13a42dc16988b8bcf4bd1493d0d9971aad31",
+              "base_ref": "main",
+              "generation": "current",
+              "draft": false,
+              "mergeable": false,
+              "checks": {
+                "status": "measured",
+                "observed": 8,
+                "successful": 4,
+                "failing": 3,
+                "pending": 0,
+                "other": 1,
+                "required_policy": "unmeasured",
+                "boundary": "Check results alone do not prove trusted producers, executed jobs, or required-check satisfaction."
+              },
+              "reviews": {
+                "status": "measured",
+                "observed": 2,
+                "other_head_reviews": 0,
+                "current_head_approvals": 0,
+                "current_head_changes_requested": 0,
+                "required_policy": "unmeasured"
+              },
+              "blockers": [
+                "merge_conflict"
+              ]
+            },
+            {
+              "status": "measured",
+              "readiness": "blocked",
+              "number": 144,
+              "head_sha": "bae48b12b2918c31f9dc0a9543c30b81fa34a409",
+              "base_sha": "8bb0e53ee95e22d26066f18618ebd6ed732165a8",
+              "base_ref": "main",
+              "generation": "current",
+              "draft": false,
+              "mergeable": false,
+              "checks": {
+                "status": "measured",
+                "observed": 8,
+                "successful": 4,
+                "failing": 3,
+                "pending": 0,
+                "other": 1,
+                "required_policy": "unmeasured",
+                "boundary": "Check results alone do not prove trusted producers, executed jobs, or required-check satisfaction."
+              },
+              "reviews": {
+                "status": "measured",
+                "observed": 1,
+                "other_head_reviews": 0,
+                "current_head_approvals": 0,
+                "current_head_changes_requested": 0,
+                "required_policy": "unmeasured"
+              },
+              "blockers": [
+                "merge_conflict"
+              ]
+            }
+          ],
+          "pulls_unmeasured": 18,
+          "readiness": "unmeasured",
+          "boundary": "At most five PRs are inspected. Exact-head observations do not establish required policy, trusted checks, code-owner approval, or the owning acceptance predicate."
+        },
+        "scope": {
+          "repositories_requested": 1,
+          "public_repositories_observed": 1,
+          "private_repositories_excluded": 0,
+          "repositories_unmeasured": 0,
+          "archive_status": "active",
+          "boundary": "One requested repository; not an administered-estate inventory or health percentage."
+        },
+        "repository": "organvm/organvm-engine",
+        "repository_id": 1160447354,
+        "default_sha": "bd223cfc9f2ee90782d6182101e849a6f97e0c99"
+      }
+    ]
+  }
+}

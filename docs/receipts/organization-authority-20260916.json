@@ -1,0 +1,12 @@
+{
+  "observed_at": "2026-09-16T06:04:56.211179+00:00",
+  "scope": "Organization authority comparison; no private identities retained",
+  "authenticated_actor_matches_requested_user": true,
+  "discovered_organizations": 10,
+  "active_admin_organizations": 10,
+  "discovered_without_admin_evidence": 0,
+  "admin_organizations_missing_from_discovery": 0,
+  "stable_identity_sets_equal": true,
+  "repository_visibility_coverage": "unmeasured",
+  "limits": "Same organization scope does not establish unrestricted repository visibility or health. Earlier 326 repository observation retains its own observation time."
+}

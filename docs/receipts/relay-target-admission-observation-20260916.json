@@ -1,0 +1,100 @@
+{
+  "observed_at": "2026-09-16T06:10:03.843284+00:00",
+  "scope": {
+    "allowlisted_targets": 6,
+    "targets_inspected": 6,
+    "targets_not_inspected": 0,
+    "runs_inspected": 7,
+    "jobs_inspected": 12,
+    "health": "unmeasured",
+    "sampling": "One or more failed default-head runs per target; not all workflows or an acceptance run."
+  },
+  "observations": [
+    {
+      "repository": "organvm/the-thing-without-a-name",
+      "repository_id": 1320324017,
+      "head": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+      "run": 33509795974,
+      "jobs": [
+        99862422478
+      ],
+      "executed_steps": 0
+    },
+    {
+      "repository": "organvm/the-thing-without-a-name",
+      "repository_id": 1320324017,
+      "head": "73da6dc1c4339c9cc75c8253c7ef5173e4091256",
+      "run": 34675569830,
+      "jobs": [
+        103504716120,
+        103504716140,
+        103504716151
+      ],
+      "executed_steps": 0
+    },
+    {
+      "repository": "organvm/learning-resources",
+      "head": "b5f3aba021238135a12497a121f78b3ec2985eb0",
+      "run": 34629534343,
+      "jobs": [
+        103362694179,
+        103362694368
+      ],
+      "executed_steps": 0
+    },
+    {
+      "repository": "organvm/process-environment-enactment",
+      "repository_id": 1350942566,
+      "head": "ffebb6fa1020098e18020f6a4a845cf933c0df3c",
+      "run": 33279890564,
+      "jobs": [
+        99173167095,
+        99173167154,
+        99173167166
+      ],
+      "executed_steps": 0
+    },
+    {
+      "repository": "organvm/organvm-engine",
+      "repository_id": 1160447354,
+      "head": "bd223cfc9f2ee90782d6182101e849a6f97e0c99",
+      "run": 34765981672,
+      "jobs": [
+        103746898763
+      ],
+      "executed_steps": 0
+    },
+    {
+      "repository": "organvm/laurea",
+      "repository_id": 1289397231,
+      "head": "faf6c5f67130925518233f5f99a76182b544fb85",
+      "run": 34980815908,
+      "jobs": [
+        104420354241
+      ],
+      "executed_steps": 0
+    },
+    {
+      "repository": "organvm/alchemical-synthesizer",
+      "repository_id": 1157553907,
+      "head": "8de2bd7bdbc075a8971e5de224bed5d020b0d8f4",
+      "run": 34862923347,
+      "jobs": [
+        104039459821
+      ],
+      "executed_steps": 0
+    }
+  ],
+  "identity_boundary": {
+    "allowlisted_danse_id": 1320324017,
+    "personal_same_name_id": 1347780050,
+    "same_repository": false
+  },
+  "limits": [
+    "No executed code failure established by these jobs.",
+    "Admission cause and remedy unverified.",
+    "These are diagnostic reads, not trusted relay execution or protected-canary receipts.",
+    "No seventh relay target, workflow dispatch, provider launch or account change."
+  ],
+  "extended_at": "2026-09-16T06:11:39.701617+00:00"
+}

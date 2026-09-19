@@ -1,0 +1,43 @@
+{
+  "schema_version": "laurea.health_observation_receipt.v1",
+  "observed_at": "2026-09-16T04:55:13.583914+00:00",
+  "repository": "organvm/laurea",
+  "repository_id": 1289397231,
+  "default_sha": "faf6c5f67130925518233f5f99a76182b544fb85",
+  "generation": "current",
+  "health": "unmeasured",
+  "scope": {
+    "repositories_requested": 1,
+    "public_repositories_observed": 1,
+    "private_repositories_excluded": 0,
+    "repositories_unmeasured": 0,
+    "archive_status": "active"
+  },
+  "verification": {
+    "runs_total": 21,
+    "runs_inspected": 10,
+    "runs_unmeasured": 11,
+    "inspected_runs_without_executed_steps": 10,
+    "acceptance": "unmeasured"
+  },
+  "security": {
+    "dependabot": {
+      "open_alerts_observed": 0,
+      "coverage": "unmeasured"
+    },
+    "code_scanning": {
+      "open_alerts_observed": 0,
+      "coverage": "unmeasured"
+    },
+    "secret_scanning": {
+      "status": "unmeasured"
+    }
+  },
+  "pr_readiness": {
+    "open_observed": 1,
+    "readiness": "unmeasured",
+    "observed_head": "f5937c1fdbe21f817056413e4b42519ccb7efaaa",
+    "checks_failing_observed": 2
+  },
+  "boundary": "Read-only observation from local implementation; neither deployment nor hosted execution nor estate-wide acceptance."
+}

@@ -6,6 +6,7 @@ from xml.sax.saxutils import escape
 
 from .baselines import STATUS_DERIVED, STATUS_MEASURED
 from .models import Finding, Report
+from .corpus import corpus_totals, require_complete
 
 NOT_MEASURED = (
     "individual authorship or responsibility for organization repositories",
@@ -105,9 +106,7 @@ def _tspans(lines: list[str], x: int, line_height: int = 14) -> str:
 def hero_card(report: Report) -> str:
     """Render a generic profile card without population-ranking claims."""
     contributions = report.snapshot["contributions"]
-    repositories = len(
-        [repo for repo in report.snapshot["repos"] if repo["isFork"] is False]
-    )
+    repositories = corpus_totals(report.snapshot)["nonfork_repositories"]
     stats = (
         (f"{contributions['total']:,}", ["contribution events", "trailing 12 months"]),
         (f"{repositories:,}", ["non-fork repositories", "visible corpus"]),
@@ -184,6 +183,23 @@ def profile_md(report: Report) -> str:
         f"*Source implementation: `{report.source_repository}` at `{report.source_sha}`.*",
         "",
     ]
+    coverage = report.snapshot.get("coverage")
+    coverage = coverage if isinstance(coverage, dict) else {}
+    lines += [
+        "## Source coverage",
+        "",
+        f"Collection: **{coverage.get('status', 'unmeasured')}**. "
+        f"Health: **{coverage.get('health_status', 'unmeasured')}**.",
+        "",
+        f"Observed repositories: {coverage.get('observed_repositories', 'unknown')}; "
+        f"private repositories excluded: {coverage.get('private_repositories_excluded', 'unknown')}; "
+        f"failed sources: {coverage.get('failed_sources', 'unknown')}.",
+        "",
+        "Token-visible membership scope is not an administered-estate census. "
+        "Default SHA identifies a source generation; it does not prove executed "
+        "verification, security coverage or PR readiness.",
+        "",
+    ]
     for finding in report.findings:
         evidence = finding.evidence.rstrip(".")
         lines += [
@@ -211,6 +227,7 @@ def profile_md(report: Report) -> str:
 
 def render_all(report: Report) -> dict[str, str]:
     """Return every generated relative path and its content."""
+    require_complete(report.snapshot)
     output = {"cards/hero.svg": hero_card(report)}
     for finding in report.findings:
         output[f"cards/{finding.axis}.svg"] = axis_card(finding)

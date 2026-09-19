@@ -7,13 +7,19 @@ on:
 permissions:
   contents: write
   issues: write
+  pull-requests: write
+
+concurrency:
+  group: arena-${{ github.event.issue.number }}
+  cancel-in-progress: false
 
 jobs:
   verify:
     if: startsWith(github.event.issue.title, 'arena:')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Extract login (strict — title is untrusted input)
         id: entrant
         env:
@@ -32,7 +38,7 @@ jobs:
         run: |
           gh issue comment ${{ github.event.issue.number }} --body "Entry format: title must be exactly \`arena: your-login\`. Edit the title or open a new issue."
           exit 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         if: steps.entrant.outputs.login != ''
         with:
           python-version: "3.12"
@@ -41,18 +47,29 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           ENTRANT: ${{ steps.entrant.outputs.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           pip install -q -e .
-          laurea arena --login "$ENTRANT"
-      - name: Commit the verified row
+          laurea arena --login "$ENTRANT" --issue "$ISSUE_NUMBER"
+      - name: Prepare the verified row PR
+        id: publication
         if: steps.entrant.outputs.login != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          ENTRANT: ${{ steps.entrant.outputs.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: python -m laurea.publish --kind arena --issue "$ISSUE_NUMBER"
+      - name: Link the prepared snapshot
+        if: steps.publication.outputs.status == 'pr_open'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          PR_URL: ${{ steps.publication.outputs.pr_url }}
         run: |
-          git config user.name "laurea[bot]"
-          git config user.email "actions@github.com"
-          git add LEADERBOARD.md
-          git diff --cached --quiet || { git commit -m "arena: verified @$ENTRANT"; git pull --rebase; git push; }
-          gh issue comment ${{ github.event.issue.number }} --body "Snapshot recorded from the live public API: see [LEADERBOARD.md](../blob/main/LEADERBOARD.md). The table compares bounded activity fields and does not rank engineering quality, @$ENTRANT."
-          gh issue close ${{ github.event.issue.number }}
+          gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Observation prepared for review: $PR_URL. This issue remains open until the accepted observation appears in the default-branch table. The table compares bounded activity fields and does not rank engineering quality."
+      - name: Report an unchanged table
+        if: steps.publication.outputs.status == 'unchanged'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body "The generated observation has no diff, so no new observation PR was prepared. This issue stays open for manual disposition. The table compares bounded activity fields and does not rank engineering quality."

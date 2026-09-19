@@ -1,0 +1,23 @@
+{
+  "observed_at": "2026-09-16T06:06:44.581514+00:00",
+  "admin_organizations": 10,
+  "organizations_with_stable_counters": 10,
+  "organizations_matching_public_plus_total_private": 10,
+  "missing_counter_sources": 0,
+  "totals": {
+    "organization_graphql_repositories": 296,
+    "organization_public_counter": 228,
+    "organization_total_private_counter": 68,
+    "organization_owned_private_counter": 67
+  },
+  "scope": "Organization repository counters only; personal owner inventory and counter semantics remain separate.",
+  "health": "unmeasured",
+  "personal_observation": {
+    "observed_at": "2026-09-16T06:07:54.233386+00:00",
+    "graphql_owned_repositories": 30,
+    "public_counter": 12,
+    "private_counter_status": "unavailable_to_current_credential",
+    "counter_reconciliation": "unmeasured"
+  },
+  "combined_visible_repositories": 326
+}

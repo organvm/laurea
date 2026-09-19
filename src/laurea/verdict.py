@@ -16,6 +16,7 @@ from typing import Any
 from xml.sax.saxutils import escape
 
 from .render import BG, BORDER, GOLD, MUTED, _STYLE, _shimmer
+from .corpus import corpus_totals
 
 API = "https://api.github.com"
 
@@ -38,7 +39,7 @@ def collect_verdict(snapshot: dict[str, Any], repo: str, token: str, today: str)
     entry: dict[str, Any] = {
         "date": today,
         "followers": snapshot["followers"],
-        "stars_estate": sum(r["stargazerCount"] for r in snapshot["repos"]),
+        "stars_estate": corpus_totals(snapshot)["stars"],
     }
     try:
         entry["showcase_stars"] = _rest(f"/repos/{repo}", token)["stargazers_count"]

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "organvm/laurea",
+    "commit": "90299a31cc77eccd0a5f2a33323f653683929e2b",
+    "path": "LEADERBOARD.md",
+    "sha256": "c7f60ffaff49478cc3430d36ae8ca93a566c655de3832d582a0d282a7b3a441e",
+    "precision": "date-only"
+  },
+  "rows": [
+    {
+      "login": "4444J99",
+      "contributions": 33587,
+      "prs": 4191,
+      "repos": 290,
+      "languages": 17,
+      "measured_axes": 4,
+      "verified": "2026-08-21"
+    }
+  ]
+}

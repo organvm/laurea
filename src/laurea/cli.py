@@ -14,7 +14,8 @@ from .baselines import STATUS_DERIVED, STATUS_MEASURED
 from .detectors import REGISTRY, run_all
 from .github import collect, resolve_token
 from .models import Finding, Report
-from .arena import build_row, update_leaderboard
+from .health import collect_health, collect_health_batch
+from .arena import build_row, update_leaderboard, write_entry, materialize_entries, check_materialized_entries, settlement_report
 from .render import render_all
 from .verdict import append_entry, collect_verdict, load_history, verdict_card
 
@@ -98,12 +99,53 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--login", required=(name != "render"))
         p.add_argument("--assets", default="assets", type=Path)
     sub.add_parser("axes")
+    health = sub.add_parser("health")
+    health.add_argument("--repo", required=True)
+    batch = sub.add_parser("health-batch")
+    batch.add_argument("--inventory", type=Path, required=True)
+    batch.add_argument("--limit", type=int, default=5)
+    batch.add_argument("--offset", type=int, default=0)
     arena = sub.add_parser("arena")
     arena.add_argument("--login", required=True)
     arena.add_argument("--leaderboard", default="LEADERBOARD.md", type=Path)
+    arena.add_argument("--issue", type=int)
+    arena.add_argument("--entries", default="arena/entries", type=Path)
+
+    table = sub.add_parser("arena-table")
+    table.add_argument("--entries", default="arena/entries", type=Path)
+    table.add_argument("--baseline", type=Path)
+    table.add_argument("--check", action="store_true")
+    table.add_argument("--settlement-report", action="store_true")
+    table.add_argument("--leaderboard", default="LEADERBOARD.md", type=Path)
 
     args = parser.parse_args(argv)
+    if args.cmd == "arena-table":
+        if args.settlement_report:
+            print(json.dumps(settlement_report(args.entries, args.leaderboard, baseline=args.baseline), indent=2))
+            return 0
+        operation = check_materialized_entries if args.check else materialize_entries
+        operation(args.entries, args.leaderboard, baseline=args.baseline)
+        print(f"arena: {'checked' if args.check else 'materialized'} accepted records -> {args.leaderboard}")
+        return 0
+    if args.cmd == "health-batch":
+        try:
+            if args.inventory.stat().st_size > 2_000_000:
+                raise ValueError("inventory exceeds size bound")
+            entries = json.loads(args.inventory.read_text())
+            result = collect_health_batch(entries, resolve_token(), limit=args.limit, offset=args.offset)
+        except (OSError, ValueError):
+            print("Health inventory unavailable or malformed", file=sys.stderr)
+            return 77
+        print(json.dumps(result, indent=2))
+        return 77
+    if args.cmd == "health":
+        result = collect_health(args.repo, resolve_token())
+        print(json.dumps(result, indent=2))
+        return 77 if result["status"] == "unmeasured" else 0
+
     if args.cmd == "arena":
+        if args.issue is not None and args.issue <= 0:
+            parser.error("--issue must be positive")
         snapshot = collect(args.login, resolve_token())
         report = Report(
             login=args.login,
@@ -111,8 +153,12 @@ def main(argv: list[str] | None = None) -> int:
             snapshot=snapshot,
             findings=run_all(snapshot),
         )
-        update_leaderboard(args.leaderboard, build_row(report))
-        print(f"arena: verified @{args.login} -> {args.leaderboard}")
+        if args.issue is not None:
+            destination = write_entry(args.entries, issue=args.issue, row=build_row(report), observed_at=report.generated_at)
+        else:
+            update_leaderboard(args.leaderboard, build_row(report))
+            destination = args.leaderboard
+        print(f"arena: verified @{args.login} -> {destination}")
         return 0
 
     if args.cmd == "axes":
